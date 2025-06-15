@@ -1,0 +1,11 @@
+/target/
+/inf_docs/
+
+/.idea/
+*.iml
+
+.DS_Store
+
+.vscode/ 
+
+.env
