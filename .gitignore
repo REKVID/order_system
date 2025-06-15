@@ -1,5 +1,5 @@
 /target/
-/inf_docs/
+documentation/
 
 /.idea/
 *.iml
