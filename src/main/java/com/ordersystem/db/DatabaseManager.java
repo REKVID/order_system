@@ -1,0 +1,46 @@
+package com.ordersystem.db;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public class DatabaseManager {
+    private static DatabaseManager instance;
+    private Connection connection;
+
+    // TODO : ЗАСУНУТЬ В .env
+    private static final String DB_URL = "";
+    private static final String DB_USER = "";
+    private static final String DB_PASSWORD = "";
+
+    private DatabaseManager() {
+        try {
+            this.connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+        } catch (SQLException e) {
+            System.err.println("ошибка подключения к БД");
+            e.printStackTrace();
+        }
+    }
+
+    public static synchronized DatabaseManager getInstance() {
+        if (instance == null) {
+            instance = new DatabaseManager();
+        }
+        return instance;
+    }
+
+    public Connection getConnection() {
+        return connection;
+    }
+
+    public void closeConnection() {
+        if (connection != null) {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                System.err.println("ошибка закрытия подключения к БД");
+                e.printStackTrace();
+            }
+        }
+    }
+}
