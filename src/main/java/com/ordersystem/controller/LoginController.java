@@ -1,5 +1,6 @@
 package com.ordersystem.controller;
 
+import com.ordersystem.App;
 import com.ordersystem.dao.ClientDAO;
 import com.ordersystem.dao.UserDAO;
 import com.ordersystem.model.Client;
@@ -14,23 +15,29 @@ public class LoginController {
 
     public LoginController() {
         view = new LoginView();
-        view.loginClientButton.setOnAction(event -> handleLoginClientButton());
+        view.loginButton.setOnAction(event -> handleLoginButton());
         view.registerButton.setOnAction(event -> handleRegisterButton());
-        view.loginAdminButton.setOnAction(event -> handleLoginAdminButton());
     }
 
     public Parent getView() {
         return view.getView();
     }
 
-    private void handleLoginClientButton() {
+    private void handleLoginButton() {
         String username = view.usernameField.getText();
         String password = view.passwordField.getText();
-        System.out.println("Попытка входа клиента: " + username + "/" + password);
+        System.out.println("Попытка входа: " + username + "/" + password);
         UserDAO userDAO = new UserDAO();
         if (userDAO.authenticateUser(username, password)) {
 
-            // TODO меню клиента
+            User user = userDAO.findByUsername(username);
+            if (user.getRoleId() == 1) {
+
+                // TODO: меню клиента
+            } else if (user.getRoleId() == 2) {
+                // TODO: меню работника
+
+            }
 
         } else {
             showAlert(Alert.AlertType.ERROR, "Неверное имя пользователя или пароль.");
@@ -49,15 +56,19 @@ public class LoginController {
 
         UserDAO userDAO = new UserDAO();
         ClientDAO clientDAO = new ClientDAO();
-        int clientRoleId = 1;
+        boolean isEmployee = view.employeeCheckBox.isSelected();
+        int roleId = isEmployee ? 2 : 1;
 
-        Client newClient = new Client();
+        Integer newClientId = null;
+        if (!isEmployee) {
+            Client newClient = new Client();
+            newClient.setName(username);
+            clientDAO.create(newClient);
+            newClientId = newClient.getId();
+        }
 
         try {
-            clientDAO.create(newClient);
-            Integer newClientId = newClient.getId();
-
-            User newUser = new User(0, username, password, clientRoleId, newClientId);
+            User newUser = new User(0, username, password, roleId, newClientId);
             userDAO.create(newUser);
 
             showAlert(Alert.AlertType.INFORMATION, "Пользователь успешно зарегистрирован!");
@@ -67,14 +78,6 @@ public class LoginController {
             showAlert(Alert.AlertType.ERROR, "Ошибка регистрации");
             e.printStackTrace();
         }
-    }
-
-    private void handleLoginAdminButton() {
-        String username = view.usernameField.getText();
-        String password = view.passwordField.getText();
-        System.out.println("Попытка входа администратора: " + username + "/" + password);
-
-        // TODO меню администратора
     }
 
     private void showAlert(Alert.AlertType alertType, String message) {
