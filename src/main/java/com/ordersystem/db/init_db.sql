@@ -1,3 +1,13 @@
+USE order_system_db;
+DROP TABLE IF EXISTS clientsChoise;
+DROP TABLE IF EXISTS document;
+DROP TABLE IF EXISTS available_delivery_methods;
+DROP TABLE IF EXISTS delivery_methods;
+DROP TABLE IF EXISTS products;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS roles;
+DROP TABLE IF EXISTS clients;
+
 CREATE TABLE clients (
     id INT AUTO_INCREMENT PRIMARY KEY, 
     name VARCHAR(50) NOT NULL, 
@@ -41,7 +51,6 @@ CREATE TABLE clientsChoise (
     product_id INT NOT NULL,                            
     delivery_Methods_id INT NULL,                       
     quantity INT NOT NULL CHECK (quantity > 0),         
-    final_delivery_cost DECIMAL(10, 2) NULL,            
     FOREIGN KEY (document_id) REFERENCES document(id) ON DELETE RESTRICT ON UPDATE CASCADE,
     FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE RESTRICT ON UPDATE CASCADE,
     FOREIGN KEY (delivery_Methods_id) REFERENCES delivery_methods(id) ON DELETE RESTRICT ON UPDATE CASCADE
