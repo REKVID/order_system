@@ -9,8 +9,8 @@ public class DatabaseManager {
     private Connection connection;
 
     // TODO : ЗАСУНУТЬ В .env
-    private static final String DB_URL = "";
-    private static final String DB_USER = "";
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/order_system_db";
+    private static final String DB_USER = "root";
     private static final String DB_PASSWORD = "";
 
     private DatabaseManager() {
