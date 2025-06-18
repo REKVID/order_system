@@ -1,26 +1,21 @@
 package com.ordersystem.model;
 
-import java.math.BigDecimal;
-
 public class ClientChoice {
     private int id;
     private int documentId;
     private int productId;
     private Integer deliveryMethodsId;
     private int quantity;
-    private BigDecimal finalDeliveryCost;
 
     public ClientChoice() {
     }
 
-    public ClientChoice(int id, int documentId, int productId, Integer deliveryMethodsId, int quantity,
-            BigDecimal finalDeliveryCost) {
+    public ClientChoice(int id, int documentId, int productId, Integer deliveryMethodsId, int quantity) {
         this.id = id;
         this.documentId = documentId;
         this.productId = productId;
         this.deliveryMethodsId = deliveryMethodsId;
         this.quantity = quantity;
-        this.finalDeliveryCost = finalDeliveryCost;
     }
 
     public int getId() {
@@ -63,14 +58,6 @@ public class ClientChoice {
         this.quantity = quantity;
     }
 
-    public BigDecimal getFinalDeliveryCost() {
-        return finalDeliveryCost;
-    }
-
-    public void setFinalDeliveryCost(BigDecimal finalDeliveryCost) {
-        this.finalDeliveryCost = finalDeliveryCost;
-    }
-
     @Override
     public String toString() {
         return "ClientChoice{" +
@@ -79,7 +66,6 @@ public class ClientChoice {
                 ", productId=" + productId +
                 ", deliveryMethodsId=" + deliveryMethodsId +
                 ", quantity=" + quantity +
-                ", finalDeliveryCost=" + finalDeliveryCost +
                 '}';
     }
 }

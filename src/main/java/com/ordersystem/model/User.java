@@ -3,17 +3,17 @@ package com.ordersystem.model;
 public class User {
     private int id;
     private String username;
-    private String passwordHash;
+    private String password;
     private int roleId;
     private Integer clientId;
 
     public User() {
     }
 
-    public User(int id, String username, String passwordHash, int roleId, Integer clientId) {
+    public User(int id, String username, String password, int roleId, Integer clientId) {
         this.id = id;
         this.username = username;
-        this.passwordHash = passwordHash;
+        this.password = password;
         this.roleId = roleId;
         this.clientId = clientId;
     }
@@ -34,12 +34,12 @@ public class User {
         this.username = username;
     }
 
-    public String getPasswordHash() {
-        return passwordHash;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public int getRoleId() {
@@ -63,7 +63,7 @@ public class User {
         return "User{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
-                ", passwordHash='" + passwordHash + '\'' +
+                ", password='" + password + '\'' +
                 ", roleId=" + roleId +
                 ", clientId=" + clientId +
                 '}';
