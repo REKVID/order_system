@@ -18,7 +18,6 @@ public class DatabaseManager {
             this.connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
         } catch (SQLException e) {
             System.err.println("ошибка подключения к БД");
-            e.printStackTrace();
         }
     }
 
@@ -39,7 +38,6 @@ public class DatabaseManager {
                 connection.close();
             } catch (SQLException e) {
                 System.err.println("ошибка закрытия подключения к БД");
-                e.printStackTrace();
             }
         }
     }

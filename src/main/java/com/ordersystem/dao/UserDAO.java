@@ -1,10 +1,13 @@
 package com.ordersystem.dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 import com.ordersystem.db.DatabaseManager;
 import com.ordersystem.model.User;
-
-import java.sql.*;
-import java.util.*;
 
 public class UserDAO {
 
@@ -12,9 +15,7 @@ public class UserDAO {
         String sql = "INSERT INTO users (username, password_hash, role_id, client_id) VALUES (?, ?, ?, ?)";
 
         Connection conn = DatabaseManager.getInstance().getConnection();
-        try (
-                PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-
+        try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getPassword());
             stmt.setInt(3, user.getRoleId());
@@ -28,9 +29,8 @@ public class UserDAO {
             stmt.executeUpdate();
 
             try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
+                if (generatedKeys.next())
                     user.setId(generatedKeys.getInt(1));
-                }
             }
 
         } catch (SQLException e) {
@@ -42,8 +42,7 @@ public class UserDAO {
         String sql = "UPDATE users SET username = ?, password_hash = ?, role_id = ?, client_id = ? WHERE id = ?";
 
         Connection conn = DatabaseManager.getInstance().getConnection();
-        try (
-                PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getPassword());
@@ -67,8 +66,7 @@ public class UserDAO {
         User user = null;
 
         Connection conn = DatabaseManager.getInstance().getConnection();
-        try (
-                PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
@@ -93,8 +91,7 @@ public class UserDAO {
         User user = null;
 
         Connection conn = DatabaseManager.getInstance().getConnection();
-        try (
-                PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, username);
             try (ResultSet rs = stmt.executeQuery()) {
@@ -113,36 +110,35 @@ public class UserDAO {
         return user;
     }
 
-    public List<User> findAll() {
-        String sql = "SELECT * FROM users";
-        List<User> users = new ArrayList<>();
+    public User findByClientId(int clientId) {
+        String sql = "SELECT * FROM users WHERE client_id = ?";
+        User user = null;
 
         Connection conn = DatabaseManager.getInstance().getConnection();
-        try (
-                PreparedStatement stmt = conn.prepareStatement(sql);
-                ResultSet rs = stmt.executeQuery()) {
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            while (rs.next()) {
-                User user = new User(
-                        rs.getInt("id"),
-                        rs.getString("username"),
-                        rs.getString("password_hash"),
-                        rs.getInt("role_id"),
-                        rs.getObject("client_id", Integer.class));
-                users.add(user);
+            stmt.setInt(1, clientId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    user = new User(
+                            rs.getInt("id"),
+                            rs.getString("username"),
+                            rs.getString("password_hash"),
+                            rs.getInt("role_id"),
+                            rs.getObject("client_id", Integer.class));
+                }
             }
         } catch (SQLException e) {
-            System.err.println("Ошибка получения всех пользователей: " + e.getMessage());
+            System.err.println("Ошибка поиска пользователя по id: " + e.getMessage());
         }
-        return users;
+        return user;
     }
 
     public void delete(int id) {
         String sql = "DELETE FROM users WHERE id = ?";
 
         Connection conn = DatabaseManager.getInstance().getConnection();
-        try (
-                PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
             stmt.executeUpdate();

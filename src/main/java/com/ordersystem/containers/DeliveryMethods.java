@@ -1,0 +1,52 @@
+package com.ordersystem.containers;
+
+import java.util.List;
+
+import com.ordersystem.dao.DeliveryMethodDAO;
+import com.ordersystem.model.DeliveryMethod;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
+public class DeliveryMethods {
+
+    private static DeliveryMethods instance;
+
+    private final ObservableList<DeliveryMethod> deliveryMethods;
+    private final DeliveryMethodDAO deliveryMethodDAO;
+
+    private DeliveryMethods() {
+        this.deliveryMethodDAO = new DeliveryMethodDAO();
+        List<DeliveryMethod> methodList = deliveryMethodDAO.findAll();
+        this.deliveryMethods = FXCollections.observableArrayList(methodList);
+    }
+
+    public static DeliveryMethods getInstance() {
+        if (instance == null) {
+            instance = new DeliveryMethods();
+        }
+        return instance;
+    }
+
+    public ObservableList<DeliveryMethod> getDeliveryMethods() {
+        return deliveryMethods;
+    }
+
+    public void create(DeliveryMethod method) {
+        deliveryMethodDAO.create(method);
+        deliveryMethods.add(method);
+    }
+
+    public void update(DeliveryMethod method) {
+        deliveryMethodDAO.update(method);
+        int index = deliveryMethods.indexOf(method);
+        if (index != -1) {
+            deliveryMethods.set(index, method);
+        }
+    }
+
+    public void delete(DeliveryMethod method) {
+        deliveryMethodDAO.delete(method.getId());
+        deliveryMethods.remove(method);
+    }
+}

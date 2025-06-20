@@ -26,24 +26,20 @@ public class LoginView {
         VBox.setMargin(titleLabel, new Insets(0, 0, 20.0, 0));
 
         usernameField = new TextField();
-        usernameField.setPromptText("Логин");
-        usernameField.setMaxWidth(500);
-        usernameField.setPrefHeight(50);
+        ViewBaseSettings.styleTextField(usernameField, "Логин");
 
         passwordField = new PasswordField();
-        passwordField.setPromptText("Пароль");
-        passwordField.setMaxWidth(500);
-        passwordField.setPrefHeight(50);
+        ViewBaseSettings.styleTextField(passwordField, "Пароль");
 
         loginButton = new Button("Войти");
-        loginButton.setMinSize(200, 60);
-        loginButton.setStyle(
-                "-fx-background-color: #007bff; -fx-text-fill: white; -fx-background-radius: 10; -fx-border-radius: 10;");
+        ViewBaseSettings.stylePrimaryButton(loginButton);
+        loginButton.setMinWidth(200);
 
         registerButton = new Button("Зарегистрироваться");
-        registerButton.setMinSize(200, 60);
+        ViewBaseSettings.stylePrimaryButton(registerButton);
+        registerButton.setMinWidth(200);
         registerButton.setStyle(
-                "-fx-background-color: #6c757d; -fx-text-fill: white; -fx-background-radius: 10; -fx-border-radius: 10;");
+                "-fx-background-color: #6c757d; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-size: 16px;");
 
         HBox actionButtons = new HBox(20, loginButton, registerButton);
         actionButtons.setAlignment(Pos.CENTER);

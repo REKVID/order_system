@@ -20,7 +20,7 @@ CREATE TABLE products (
     id INT AUTO_INCREMENT PRIMARY KEY,          
     name VARCHAR(50) NOT NULL,                 
     price DECIMAL(10, 2) NOT NULL,              
-    description TEXT,                           
+    description TEXT NOT NULL,                           
     is_delivery_available BOOLEAN NOT NULL      
 );
 
@@ -34,8 +34,9 @@ CREATE TABLE available_delivery_Methods (
     product_id INT,                     
     delivery_method_id INT,             
     delivery_cost DECIMAL(10, 2) NOT NULL, 
-    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE RESTRICT ON UPDATE CASCADE,
-    FOREIGN KEY (delivery_method_id) REFERENCES delivery_methods(id) ON DELETE RESTRICT ON UPDATE CASCADE
+    PRIMARY KEY (product_id, delivery_method_id),
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (delivery_method_id) REFERENCES delivery_methods(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE document (
@@ -51,9 +52,9 @@ CREATE TABLE clientsChoise (
     product_id INT NOT NULL,                            
     delivery_Methods_id INT NULL,                       
     quantity INT NOT NULL CHECK (quantity > 0),         
-    FOREIGN KEY (document_id) REFERENCES document(id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    FOREIGN KEY (document_id) REFERENCES document(id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE RESTRICT ON UPDATE CASCADE,
-    FOREIGN KEY (delivery_Methods_id) REFERENCES delivery_methods(id) ON DELETE RESTRICT ON UPDATE CASCADE
+    FOREIGN KEY (delivery_Methods_id) REFERENCES delivery_methods(id) ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 CREATE TABLE roles (
