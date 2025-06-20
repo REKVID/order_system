@@ -29,9 +29,8 @@ public class UserDAO {
             stmt.executeUpdate();
 
             try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
+                if (generatedKeys.next())
                     user.setId(generatedKeys.getInt(1));
-                }
             }
 
         } catch (SQLException e) {
@@ -107,6 +106,30 @@ public class UserDAO {
             }
         } catch (SQLException e) {
             System.err.println("Ошибка поиска пользователя по имени пользователя: " + e.getMessage());
+        }
+        return user;
+    }
+
+    public User findByClientId(int clientId) {
+        String sql = "SELECT * FROM users WHERE client_id = ?";
+        User user = null;
+
+        Connection conn = DatabaseManager.getInstance().getConnection();
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, clientId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    user = new User(
+                            rs.getInt("id"),
+                            rs.getString("username"),
+                            rs.getString("password_hash"),
+                            rs.getInt("role_id"),
+                            rs.getObject("client_id", Integer.class));
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Ошибка поиска пользователя по id: " + e.getMessage());
         }
         return user;
     }
