@@ -2,6 +2,7 @@ package com.ordersystem.controller;
 
 import java.math.BigDecimal;
 
+import com.ordersystem.containers.AvailableDeliveryMethods;
 import com.ordersystem.containers.Products;
 import com.ordersystem.model.Product;
 import com.ordersystem.view.EmployeeMainView;
@@ -14,10 +15,13 @@ public class ProductController {
 
     private final EmployeeMainView view;
     private final Products productsContainer;
+    private final AvailableDeliveryMethods availableDeliveryMethodsContainer;
 
-    public ProductController(EmployeeMainView view, Products productsContainer) {
+    public ProductController(EmployeeMainView view, Products productsContainer,
+            AvailableDeliveryMethods availableDeliveryMethodsContainer) {
         this.view = view;
         this.productsContainer = productsContainer;
+        this.availableDeliveryMethodsContainer = availableDeliveryMethodsContainer;
         view.productsTableView.setItems(productsContainer.getProductsList());
         setupEventHandlers();
     }
@@ -147,6 +151,7 @@ public class ProductController {
             if (productToDelete != null) {
 
                 productsContainer.delete(productToDelete);
+                availableDeliveryMethodsContainer.loadAll();
                 showAlert(Alert.AlertType.INFORMATION, "Товар успешно удален.");
                 clearProductForm();
 

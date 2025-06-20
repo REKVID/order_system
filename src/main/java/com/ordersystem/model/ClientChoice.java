@@ -4,17 +4,17 @@ public class ClientChoice {
     private int id;
     private int documentId;
     private int productId;
-    private Integer deliveryMethodsId;
+    private Integer deliveryMethodId;
     private int quantity;
 
     public ClientChoice() {
     }
 
-    public ClientChoice(int id, int documentId, int productId, Integer deliveryMethodsId, int quantity) {
+    public ClientChoice(int id, int documentId, int productId, Integer deliveryMethodId, int quantity) {
         this.id = id;
         this.documentId = documentId;
         this.productId = productId;
-        this.deliveryMethodsId = deliveryMethodsId;
+        this.deliveryMethodId = deliveryMethodId;
         this.quantity = quantity;
     }
 
@@ -42,12 +42,12 @@ public class ClientChoice {
         this.productId = productId;
     }
 
-    public Integer getDeliveryMethodsId() {
-        return deliveryMethodsId;
+    public Integer getDeliveryMethodId() {
+        return deliveryMethodId;
     }
 
-    public void setDeliveryMethodsId(Integer deliveryMethodsId) {
-        this.deliveryMethodsId = deliveryMethodsId;
+    public void setDeliveryMethodId(Integer deliveryMethodId) {
+        this.deliveryMethodId = deliveryMethodId;
     }
 
     public int getQuantity() {

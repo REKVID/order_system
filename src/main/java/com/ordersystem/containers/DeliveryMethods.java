@@ -32,6 +32,11 @@ public class DeliveryMethods {
         return deliveryMethods;
     }
 
+    public void loadAll() {
+        List<DeliveryMethod> methodList = deliveryMethodDAO.findAll();
+        deliveryMethods.setAll(methodList);
+    }
+
     public void create(DeliveryMethod method) {
         deliveryMethodDAO.create(method);
         deliveryMethods.add(method);

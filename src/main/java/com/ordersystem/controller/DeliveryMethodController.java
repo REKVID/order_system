@@ -1,5 +1,6 @@
 package com.ordersystem.controller;
 
+import com.ordersystem.containers.AvailableDeliveryMethods;
 import com.ordersystem.containers.DeliveryMethods;
 import com.ordersystem.model.DeliveryMethod;
 import com.ordersystem.view.EmployeeMainView;
@@ -12,10 +13,13 @@ public class DeliveryMethodController {
 
     private final EmployeeMainView view;
     private final DeliveryMethods deliveryMethodsContainer;
+    private final AvailableDeliveryMethods availableDeliveryMethodsContainer;
 
-    public DeliveryMethodController(EmployeeMainView view, DeliveryMethods deliveryMethodsContainer) {
+    public DeliveryMethodController(EmployeeMainView view, DeliveryMethods deliveryMethodsContainer,
+            AvailableDeliveryMethods availableDeliveryMethodsContainer) {
         this.view = view;
         this.deliveryMethodsContainer = deliveryMethodsContainer;
+        this.availableDeliveryMethodsContainer = availableDeliveryMethodsContainer;
         view.deliveryMethodsTableView.setItems(deliveryMethodsContainer.getDeliveryMethods());
         setupEventHandlers();
     }
@@ -121,6 +125,7 @@ public class DeliveryMethodController {
 
             if (methodToDelete != null) {
                 deliveryMethodsContainer.delete(methodToDelete);
+                availableDeliveryMethodsContainer.loadAll();
                 showAlert(Alert.AlertType.INFORMATION, "Способ доставки удален.");
                 clearDeliveryMethodForm();
             } else {

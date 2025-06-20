@@ -27,8 +27,9 @@ public class EmployeeMainController {
         AvailableDeliveryMethods availableDeliveryMethodsContainer = AvailableDeliveryMethods.getInstance();
 
         this.documentController = new DocumentController(view, documentsContainer);
-        this.productController = new ProductController(view, productsContainer);
-        this.deliveryMethodController = new DeliveryMethodController(view, deliveryMethodsContainer);
+        this.productController = new ProductController(view, productsContainer, availableDeliveryMethodsContainer);
+        this.deliveryMethodController = new DeliveryMethodController(view, deliveryMethodsContainer,
+                availableDeliveryMethodsContainer);
         this.availableDeliveryMethodController = new AvailableDeliveryMethodController(view,
                 availableDeliveryMethodsContainer);
 
@@ -39,24 +40,28 @@ public class EmployeeMainController {
         view.documentsButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                Documents.getInstance().loadAll();
                 view.showDocuments();
             }
         });
         view.productsButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                Products.getInstance().loadAll();
                 view.showProducts();
             }
         });
         view.deliveryMethodsButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                DeliveryMethods.getInstance().loadAll();
                 view.showDeliveryMethods();
             }
         });
         view.availableDeliveryMethodsButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                AvailableDeliveryMethods.getInstance().loadAll();
                 view.showAvailableDeliveryMethods();
             }
         });

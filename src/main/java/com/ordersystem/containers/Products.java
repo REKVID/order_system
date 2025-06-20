@@ -32,6 +32,11 @@ public class Products {
         return productsList;
     }
 
+    public void loadAll() {
+        List<Product> productList = productDAO.findAll();
+        productsList.setAll(productList);
+    }
+
     public void create(Product product) {
         productDAO.create(product);
         productsList.add(product);

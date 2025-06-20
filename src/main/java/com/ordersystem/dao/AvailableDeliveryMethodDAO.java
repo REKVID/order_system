@@ -32,7 +32,7 @@ public class AvailableDeliveryMethodDAO {
     }
 
     public void save(AvailableDeliveryMethod availableDeliveryMethod) {
-        String sql = "INSERT INTO available_delivery_Methods (product_id, delivery_method_id, delivery_cost) " +
+        String sql = "INSERT INTO available_delivery_methods (product_id, delivery_method_id, delivery_cost) " +
                 "VALUES (?, ?, ?) " +
                 "ON DUPLICATE KEY UPDATE delivery_cost = VALUES(delivery_cost)";
 
@@ -48,7 +48,7 @@ public class AvailableDeliveryMethodDAO {
     }
 
     public List<AvailableDeliveryMethod> findByProductId(int productId) {
-        String sql = "SELECT * FROM available_delivery_Methods WHERE product_id = ?";
+        String sql = "SELECT * FROM available_delivery_methods WHERE product_id = ?";
         List<AvailableDeliveryMethod> methods = new ArrayList<>();
         Connection conn = DatabaseManager.getInstance().getConnection();
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -69,7 +69,7 @@ public class AvailableDeliveryMethodDAO {
     }
 
     public void delete(int productId, int deliveryMethodId) {
-        String sql = "DELETE FROM available_delivery_Methods WHERE product_id = ? AND delivery_method_id = ?";
+        String sql = "DELETE FROM available_delivery_methods WHERE product_id = ? AND delivery_method_id = ?";
         Connection conn = DatabaseManager.getInstance().getConnection();
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, productId);

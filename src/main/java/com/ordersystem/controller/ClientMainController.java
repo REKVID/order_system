@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.ordersystem.containers.ClientChoices;
 import com.ordersystem.containers.Products;
 import com.ordersystem.dao.AvailableDeliveryMethodDAO;
-import com.ordersystem.dao.ClientChoiceDAO;
 import com.ordersystem.dao.ClientDAO;
 import com.ordersystem.dao.DeliveryMethodDAO;
 import com.ordersystem.dao.DocumentDAO;
@@ -46,7 +46,6 @@ public class ClientMainController {
     private final ClientDAO clientDAO;
     private final DeliveryMethodDAO deliveryMethodDAO;
     private final AvailableDeliveryMethodDAO availableDeliveryMethodDAO;
-    private final ClientChoiceDAO clientChoiceDAO;
     private final UserDAO userDAO;
     private final List<ClientChoice> shoppingCart;
 
@@ -56,7 +55,6 @@ public class ClientMainController {
         this.clientDAO = new ClientDAO();
         this.deliveryMethodDAO = new DeliveryMethodDAO();
         this.availableDeliveryMethodDAO = new AvailableDeliveryMethodDAO();
-        this.clientChoiceDAO = new ClientChoiceDAO();
         this.userDAO = new UserDAO();
         this.view = new ClientMainView();
         this.shoppingCart = new ArrayList<>();
@@ -288,7 +286,7 @@ public class ClientMainController {
         ClientChoice choice = new ClientChoice();
         choice.setProductId(product.getId());
         choice.setQuantity(quantity);
-        choice.setDeliveryMethodsId(selectedDelivery.getAvailableDeliveryMethod().getDeliveryMethodId());
+        choice.setDeliveryMethodId(selectedDelivery.getAvailableDeliveryMethod().getDeliveryMethodId());
         return choice;
     }
 
@@ -313,9 +311,10 @@ public class ClientMainController {
         int documentId = documentDAO.create(newDocument);
 
         if (documentId != -1) {
+            ClientChoices clientChoices = new ClientChoices(documentId);
             for (ClientChoice choice : shoppingCart) {
                 choice.setDocumentId(documentId);
-                clientChoiceDAO.create(choice);
+                clientChoices.create(choice);
             }
             showAlert(Alert.AlertType.INFORMATION, "Ваш заказ успешно оформлен!");
             shoppingCart.clear(); // Очищаем корзину после успешного заказа
@@ -331,8 +330,8 @@ public class ClientMainController {
     }
 
     private void loadClientChoices(int documentId) {
-        List<ClientChoice> choices = clientChoiceDAO.findByDocumentId(documentId);
-        view.getClientChoicesTableView().setItems(FXCollections.observableArrayList(choices));
+        ClientChoices clientChoices = new ClientChoices(documentId);
+        view.getClientChoicesTableView().setItems(clientChoices.getClientChoicesList());
     }
 
     private void loadProfileData() {
