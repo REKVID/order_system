@@ -74,13 +74,13 @@ public class EmployeeMainView {
         view = new BorderPane();
 
         documentsButton = new Button("Документы");
-        styleNavButton(documentsButton);
+        ViewBaseSettings.styleNavButton(documentsButton, 200, 50);
         productsButton = new Button("Товары");
-        styleNavButton(productsButton);
+        ViewBaseSettings.styleNavButton(productsButton, 200, 50);
         deliveryMethodsButton = new Button("Способы доставки");
-        styleNavButton(deliveryMethodsButton);
+        ViewBaseSettings.styleNavButton(deliveryMethodsButton, 200, 50);
         availableDeliveryMethodsButton = new Button("Доступные способы доставки");
-        styleNavButton(availableDeliveryMethodsButton);
+        ViewBaseSettings.styleNavButton(availableDeliveryMethodsButton, 200, 50);
 
         VBox navigationBox = new VBox(20, documentsButton, productsButton, deliveryMethodsButton,
                 availableDeliveryMethodsButton);
@@ -98,22 +98,8 @@ public class EmployeeMainView {
         view.setCenter(documentsView);
     }
 
-    private VBox createBaseViewContainer(String title) {
-        VBox container = new VBox(20);
-        container.setPadding(new Insets(40));
-        container.setStyle("-fx-background-color: white;");
-        container.setAlignment(Pos.TOP_CENTER);
-
-        Label titleLabel = new Label(title);
-        titleLabel.setFont(new Font(48.0));
-        VBox.setMargin(titleLabel, new Insets(0, 0, 20, 0));
-
-        container.getChildren().add(titleLabel);
-        return container;
-    }
-
     private Node createDocumentsView() {
-        VBox container = createBaseViewContainer("Все заказы");
+        VBox container = ViewBaseSettings.createBaseViewContainer("Все заказы", 20);
 
         documentsTableView = new TableView<>();
         TableColumn<Document, Integer> docIdColumn = new TableColumn<>("ID Заказа");
@@ -138,17 +124,19 @@ public class EmployeeMainView {
         clientChoicesTableView = new TableView<>();
         TableColumn<ClientChoice, Integer> productIdColumn = new TableColumn<>("ID Продукта");
         productIdColumn.setCellValueFactory(new PropertyValueFactory<>("productId"));
+        TableColumn<ClientChoice, Integer> deliveryMethodIdColumn = new TableColumn<>("ID Способа доставки");
+        deliveryMethodIdColumn.setCellValueFactory(new PropertyValueFactory<>("deliveryMethodsId"));
         TableColumn<ClientChoice, Integer> quantityColumn = new TableColumn<>("Количество");
         quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
 
-        clientChoicesTableView.getColumns().addAll(productIdColumn, quantityColumn);
+        clientChoicesTableView.getColumns().addAll(productIdColumn, deliveryMethodIdColumn, quantityColumn);
 
         container.getChildren().addAll(documentsTableView, idInputBox, clientChoicesLabel, clientChoicesTableView);
         return container;
     }
 
     private Node createProductsView() {
-        VBox container = createBaseViewContainer("Управление товарами");
+        VBox container = ViewBaseSettings.createBaseViewContainer("Управление товарами", 20);
 
         productsTableView = new TableView<>();
         TableColumn<Product, Integer> productIdCol = new TableColumn<>("ID");
@@ -202,7 +190,7 @@ public class EmployeeMainView {
     }
 
     private Node createDeliveryMethodsView() {
-        VBox container = createBaseViewContainer("Способы доставки");
+        VBox container = ViewBaseSettings.createBaseViewContainer("Способы доставки", 20);
 
         deliveryMethodsTableView = new TableView<>();
         TableColumn<DeliveryMethod, Integer> methodIdCol = new TableColumn<>("ID");
@@ -239,7 +227,7 @@ public class EmployeeMainView {
     }
 
     private Node createAvailableDeliveryMethodsView() {
-        VBox container = createBaseViewContainer("Доступные способы доставки");
+        VBox container = ViewBaseSettings.createBaseViewContainer("Доступные способы доставки", 20);
 
         availableDeliveryMethodsTableView = new TableView<>();
         TableColumn<AvailableDeliveryMethod, Integer> productIdCol = new TableColumn<>(
@@ -300,12 +288,6 @@ public class EmployeeMainView {
 
     public void showAvailableDeliveryMethods() {
         view.setCenter(availableDeliveryMethodsView);
-    }
-
-    private void styleNavButton(Button button) {
-        button.setPrefWidth(200);
-        button.setStyle(
-                "-fx-background-color: #007bff; -fx-text-fill: white; -fx-font-size: 16px; -fx-background-radius: 10;");
     }
 
     public Parent getView() {
