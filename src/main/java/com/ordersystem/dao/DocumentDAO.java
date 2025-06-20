@@ -37,27 +37,6 @@ public class DocumentDAO {
         return documentId;
     }
 
-    public Document findById(int id) {
-        String sql = "SELECT * FROM document WHERE id = ?";
-        Document document = null;
-        Connection conn = DatabaseManager.getInstance().getConnection();
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, id);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    document = new Document(
-                            rs.getInt("id"),
-                            rs.getInt("client_id"),
-                            rs.getDate("date"));
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println("Ошибка получения документа по ID: " + e.getMessage());
-        }
-        return document;
-    }
-
     public List<Document> findAllByClientId(int clientId) {
         String sql = "SELECT * FROM document WHERE client_id = ?";
         List<Document> documents = new ArrayList<>();

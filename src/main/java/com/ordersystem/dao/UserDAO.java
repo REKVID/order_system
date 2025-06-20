@@ -61,31 +61,6 @@ public class UserDAO {
         }
     }
 
-    public User findById(int id) {
-        String sql = "SELECT * FROM users WHERE id = ?";
-        User user = null;
-
-        Connection conn = DatabaseManager.getInstance().getConnection();
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, id);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    user = new User(
-                            rs.getInt("id"),
-                            rs.getString("username"),
-                            rs.getString("password_hash"),
-                            rs.getInt("role_id"),
-                            rs.getObject("client_id", Integer.class) // Для nullable Integer
-                    );
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println("Ошибка поиска пользователя по id: " + e.getMessage());
-        }
-        return user;
-    }
-
     public User findByUsername(String username) {
         String sql = "SELECT * FROM users WHERE username = ?";
         User user = null;

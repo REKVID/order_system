@@ -37,13 +37,4 @@ public class DeliveryMethod {
     public void setSpeedDays(int speedDays) {
         this.speedDays = speedDays;
     }
-
-    @Override
-    public String toString() {
-        return "DeliveryMethod{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", speedDays=" + speedDays +
-                '}';
-    }
 }

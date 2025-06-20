@@ -57,15 +57,4 @@ public class User {
     public void setClientId(Integer clientId) {
         this.clientId = clientId;
     }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", roleId=" + roleId +
-                ", clientId=" + clientId +
-                '}';
-    }
 }

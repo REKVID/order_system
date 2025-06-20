@@ -57,15 +57,4 @@ public class ClientChoice {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
-
-    @Override
-    public String toString() {
-        return "ClientChoice{" +
-                "id=" + id +
-                ", documentId=" + documentId +
-                ", productId=" + productId +
-                ", deliveryMethodsId=" + deliveryMethodsId +
-                ", quantity=" + quantity +
-                '}';
-    }
 }

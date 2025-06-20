@@ -74,17 +74,4 @@ public class ClientDAO {
         }
         return client;
     }
-
-    public void delete(int id) {
-        String sql = "DELETE FROM clients WHERE id = ?";
-        Connection conn = DatabaseManager.getInstance().getConnection();
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, id);
-            stmt.executeUpdate();
-
-        } catch (SQLException e) {
-            System.err.println("Ошибка при удалении клиента: " + e.getMessage());
-        }
-    }
 }

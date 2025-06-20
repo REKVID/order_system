@@ -18,7 +18,6 @@ public class Client {
         this.contactPerson = contactPerson;
     }
 
-    // Getters and Setters
     public int getId() {
         return id;
     }
@@ -57,16 +56,5 @@ public class Client {
 
     public void setContactPerson(String contactPerson) {
         this.contactPerson = contactPerson;
-    }
-
-    @Override
-    public String toString() {
-        return "Client{" +
-               "id=" + id +
-               ", name='" + name + '\'' +
-               ", phone='" + phone + '\'' +
-               ", address='" + address + '\'' +
-               ", contactPerson='" + contactPerson + '\'' +
-               '}';
     }
 }

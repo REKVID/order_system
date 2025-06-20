@@ -62,17 +62,4 @@ public class ClientChoiceDAO {
         }
         return clientChoices;
     }
-
-    public void delete(int id) {
-        String sql = "DELETE FROM clientsChoise WHERE id = ?";
-        Connection conn = DatabaseManager.getInstance().getConnection();
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, id);
-            stmt.executeUpdate();
-
-        } catch (SQLException e) {
-            System.err.println("Ошибка при удалении выбора клиента: " + e.getMessage());
-        }
-    }
 }

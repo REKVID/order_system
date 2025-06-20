@@ -39,13 +39,4 @@ public class AvailableDeliveryMethod {
     public void setDeliveryCost(BigDecimal deliveryCost) {
         this.deliveryCost = deliveryCost;
     }
-
-    @Override
-    public String toString() {
-        return "AvailableDeliveryMethod{" +
-                "productId=" + productId +
-                ", deliveryMethodId=" + deliveryMethodId +
-                ", deliveryCost=" + deliveryCost +
-                '}';
-    }
 }

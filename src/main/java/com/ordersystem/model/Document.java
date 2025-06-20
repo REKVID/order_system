@@ -40,12 +40,4 @@ public class Document {
         this.date = date;
     }
 
-    @Override
-    public String toString() {
-        return "Document{" +
-                "id=" + id +
-                ", clientId=" + clientId +
-                ", date=" + date +
-                '}';
-    }
 }
