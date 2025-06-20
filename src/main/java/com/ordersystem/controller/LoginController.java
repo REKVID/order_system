@@ -7,6 +7,8 @@ import com.ordersystem.model.Client;
 import com.ordersystem.model.User;
 import com.ordersystem.view.LoginView;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 
@@ -15,8 +17,18 @@ public class LoginController {
 
     public LoginController() {
         view = new LoginView();
-        view.loginButton.setOnAction(event -> handleLoginButton());
-        view.registerButton.setOnAction(event -> handleRegisterButton());
+        view.loginButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                handleLoginButton();
+            }
+        });
+        view.registerButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                handleRegisterButton();
+            }
+        });
     }
 
     public Parent getView() {
@@ -32,11 +44,11 @@ public class LoginController {
 
             User user = userDAO.findByUsername(username);
             if (user.getRoleId() == 1) {
-
-                // TODO: меню клиента
+                ClientMainController clientMainController = new ClientMainController(user.getClientId());
+                App.setRoot(clientMainController.getView(), "Главное меню клиента");
             } else if (user.getRoleId() == 2) {
-                // TODO: меню работника
-
+                EmployeeMainController employeeMainController = new EmployeeMainController();
+                App.setRoot(employeeMainController.getView(), "Панель управления сотрудника");
             }
 
         } else {
@@ -70,19 +82,15 @@ public class LoginController {
         try {
             User newUser = new User(0, username, password, roleId, newClientId);
             userDAO.create(newUser);
-
             showAlert(Alert.AlertType.INFORMATION, "Пользователь успешно зарегистрирован!");
-            view.usernameField.clear();
-            view.passwordField.clear();
+
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Ошибка регистрации");
-            e.printStackTrace();
         }
     }
 
     private void showAlert(Alert.AlertType alertType, String message) {
         Alert alert = new Alert(alertType);
-        alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
     }
