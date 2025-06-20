@@ -1,10 +1,15 @@
 package com.ordersystem.dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.ordersystem.db.DatabaseManager;
 import com.ordersystem.model.Product;
-
-import java.sql.*;
-import java.util.*;
 
 public class ProductDAO {
 
@@ -40,28 +45,6 @@ public class ProductDAO {
         } catch (SQLException e) {
             System.err.println("Ошибка при обновлении продукта: " + e.getMessage());
         }
-    }
-
-    public Product findById(int id) {
-        String sql = "SELECT * FROM products WHERE id = ?";
-        Product product = null;
-        Connection conn = DatabaseManager.getInstance().getConnection();
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, id);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    product = new Product(
-                            rs.getInt("id"),
-                            rs.getString("name"),
-                            rs.getBigDecimal("price"),
-                            rs.getString("description"),
-                            rs.getBoolean("is_delivery_available"));
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println("Ошибка при поиске продукта по ID: " + e.getMessage());
-        }
-        return product;
     }
 
     public List<Product> findAll() {

@@ -1,10 +1,13 @@
 package com.ordersystem.dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 import com.ordersystem.db.DatabaseManager;
 import com.ordersystem.model.Client;
-
-import java.sql.*;
-import java.util.*;
 
 public class ClientDAO {
 
@@ -70,28 +73,6 @@ public class ClientDAO {
             System.err.println("ошибка при поиске клиента по ID: " + e.getMessage());
         }
         return client;
-    }
-
-    public List<Client> findAll() {
-        String sql = "SELECT * FROM clients";
-        List<Client> clients = new ArrayList<>();
-        Connection conn = DatabaseManager.getInstance().getConnection();
-        try (PreparedStatement stmt = conn.prepareStatement(sql);
-                ResultSet rs = stmt.executeQuery()) {
-
-            while (rs.next()) {
-                Client client = new Client(
-                        rs.getInt("id"),
-                        rs.getString("name"),
-                        rs.getString("phone"),
-                        rs.getString("address"),
-                        rs.getString("contact_person"));
-                clients.add(client);
-            }
-        } catch (SQLException e) {
-            System.err.println("Ошибка при получении всех клиентов: " + e.getMessage());
-        }
-        return clients;
     }
 
     public void delete(int id) {

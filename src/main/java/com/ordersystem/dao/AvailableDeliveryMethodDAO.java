@@ -1,12 +1,35 @@
 package com.ordersystem.dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.ordersystem.db.DatabaseManager;
 import com.ordersystem.model.AvailableDeliveryMethod;
 
-import java.sql.*;
-import java.util.*;
-
 public class AvailableDeliveryMethodDAO {
+
+    public List<AvailableDeliveryMethod> findAll() {
+        String sql = "SELECT * FROM available_delivery_methods";
+        List<AvailableDeliveryMethod> methods = new ArrayList<>();
+        Connection conn = DatabaseManager.getInstance().getConnection();
+        try (PreparedStatement stmt = conn.prepareStatement(sql);
+                ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                AvailableDeliveryMethod method = new AvailableDeliveryMethod(
+                        rs.getInt("product_id"),
+                        rs.getInt("delivery_method_id"),
+                        rs.getBigDecimal("delivery_cost"));
+                methods.add(method);
+            }
+        } catch (SQLException e) {
+            System.err.println("ошибка поиска всех доступных методов доставки: " + e.getMessage());
+        }
+        return methods;
+    }
 
     public void save(AvailableDeliveryMethod availableDeliveryMethod) {
         String sql = "INSERT INTO available_delivery_Methods (product_id, delivery_method_id, delivery_cost) " +
@@ -56,4 +79,5 @@ public class AvailableDeliveryMethodDAO {
             System.err.println("Ошибка удаления доступного метода доставки: " + e.getMessage());
         }
     }
+
 }

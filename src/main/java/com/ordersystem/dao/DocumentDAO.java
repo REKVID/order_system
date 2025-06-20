@@ -1,10 +1,15 @@
 package com.ordersystem.dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.ordersystem.db.DatabaseManager;
 import com.ordersystem.model.Document;
-
-import java.sql.*;
-import java.util.*;
 
 public class DocumentDAO {
 
@@ -30,22 +35,6 @@ public class DocumentDAO {
             System.err.println("Ошибка при создании документа: " + e.getMessage());
         }
         return documentId;
-    }
-
-    public void update(Document document) {
-        String sql = "UPDATE document SET client_id = ?, date = ? WHERE id = ?";
-        Connection conn = DatabaseManager.getInstance().getConnection();
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, document.getClientId());
-            stmt.setDate(2, document.getDate());
-            stmt.setInt(3, document.getId());
-
-            stmt.executeUpdate();
-
-        } catch (SQLException e) {
-            System.err.println("Ошибка при обновлении документа: " + e.getMessage());
-        }
     }
 
     public Document findById(int id) {
@@ -90,16 +79,24 @@ public class DocumentDAO {
         return documents;
     }
 
-    public void delete(int id) {
-        String sql = "DELETE FROM document WHERE id = ?";
+    public List<Document> findAll() {
+        String sql = "SELECT * FROM document ORDER BY date DESC";
+        List<Document> documents = new ArrayList<>();
         Connection conn = DatabaseManager.getInstance().getConnection();
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(sql)) {
 
-            stmt.setInt(1, id);
-            stmt.executeUpdate();
+            while (rs.next()) {
+                Document document = new Document(
+                        rs.getInt("id"),
+                        rs.getInt("client_id"),
+                        rs.getDate("date"));
+                documents.add(document);
+            }
 
         } catch (SQLException e) {
-            System.err.println("Ошибка при удалении документа: " + e.getMessage());
+            System.err.println("Ошибка при получении всех документов: " + e.getMessage());
         }
+        return documents;
     }
 }
