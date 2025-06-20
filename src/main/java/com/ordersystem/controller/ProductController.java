@@ -6,6 +6,8 @@ import com.ordersystem.containers.Products;
 import com.ordersystem.model.Product;
 import com.ordersystem.view.EmployeeMainView;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 
 public class ProductController {
@@ -21,9 +23,24 @@ public class ProductController {
     }
 
     private void setupEventHandlers() {
-        view.addProductButton.setOnAction(e -> createProduct());
-        view.saveProductButton.setOnAction(e -> updateProduct());
-        view.deleteProductButton.setOnAction(e -> deleteProduct());
+        view.addProductButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                createProduct();
+            }
+        });
+        view.saveProductButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                updateProduct();
+            }
+        });
+        view.deleteProductButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                deleteProduct();
+            }
+        });
     }
 
     private void clearProductForm() {

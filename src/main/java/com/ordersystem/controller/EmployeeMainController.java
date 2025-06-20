@@ -6,6 +6,8 @@ import com.ordersystem.containers.Documents;
 import com.ordersystem.containers.Products;
 import com.ordersystem.view.EmployeeMainView;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Parent;
 
 public class EmployeeMainController {
@@ -34,10 +36,30 @@ public class EmployeeMainController {
     }
 
     private void setupEventHandlers() {
-        view.documentsButton.setOnAction(e -> view.showDocuments());
-        view.productsButton.setOnAction(e -> view.showProducts());
-        view.deliveryMethodsButton.setOnAction(e -> view.showDeliveryMethods());
-        view.availableDeliveryMethodsButton.setOnAction(e -> view.showAvailableDeliveryMethods());
+        view.documentsButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                view.showDocuments();
+            }
+        });
+        view.productsButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                view.showProducts();
+            }
+        });
+        view.deliveryMethodsButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                view.showDeliveryMethods();
+            }
+        });
+        view.availableDeliveryMethodsButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                view.showAvailableDeliveryMethods();
+            }
+        });
     }
 
     public Parent getView() {

@@ -4,6 +4,8 @@ import com.ordersystem.containers.Documents;
 import com.ordersystem.model.Document;
 import com.ordersystem.view.EmployeeMainView;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 
 public class DocumentController {
@@ -20,7 +22,12 @@ public class DocumentController {
     }
 
     private void setupEventHandlers() {
-        view.showDocumentContentButton.setOnAction(e -> showDocumentContent());
+        view.showDocumentContentButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                showDocumentContent();
+            }
+        });
     }
 
     private void showDocumentContent() {

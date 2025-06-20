@@ -6,6 +6,8 @@ import com.ordersystem.containers.AvailableDeliveryMethods;
 import com.ordersystem.model.AvailableDeliveryMethod;
 import com.ordersystem.view.EmployeeMainView;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 
 public class AvailableDeliveryMethodController {
@@ -23,15 +25,24 @@ public class AvailableDeliveryMethodController {
     }
 
     private void setupEventHandlers() {
-        view.addAvailableDeliveryMethodButton.setOnAction(e -> createAvailableDeliveryMethod());
-        view.saveAvailableDeliveryMethodButton.setOnAction(e -> updateAvailableDeliveryMethod());
-        view.deleteAvailableDeliveryMethodButton.setOnAction(e -> deleteAvailableDeliveryMethod());
-    }
-
-    private void clearForm() {
-        view.formProductIdField.clear();
-        view.availableDeliveryMethodIdField.clear();
-        view.availableDeliveryCostField.clear();
+        view.addAvailableDeliveryMethodButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                createAvailableDeliveryMethod();
+            }
+        });
+        view.saveAvailableDeliveryMethodButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                updateAvailableDeliveryMethod();
+            }
+        });
+        view.deleteAvailableDeliveryMethodButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                deleteAvailableDeliveryMethod();
+            }
+        });
     }
 
     private void createAvailableDeliveryMethod() {
@@ -80,6 +91,12 @@ public class AvailableDeliveryMethodController {
         } catch (NumberFormatException e) {
             showAlert(Alert.AlertType.ERROR, "ID должны быть числами.");
         }
+    }
+
+    private void clearForm() {
+        view.formProductIdField.clear();
+        view.availableDeliveryMethodIdField.clear();
+        view.availableDeliveryCostField.clear();
     }
 
     private void showAlert(Alert.AlertType alertType, String message) {

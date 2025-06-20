@@ -4,6 +4,8 @@ import com.ordersystem.containers.DeliveryMethods;
 import com.ordersystem.model.DeliveryMethod;
 import com.ordersystem.view.EmployeeMainView;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 
 public class DeliveryMethodController {
@@ -19,9 +21,24 @@ public class DeliveryMethodController {
     }
 
     private void setupEventHandlers() {
-        view.addDeliveryMethodButton.setOnAction(e -> createDeliveryMethod());
-        view.saveDeliveryMethodButton.setOnAction(e -> updateDeliveryMethod());
-        view.deleteDeliveryMethodButton.setOnAction(e -> deleteDeliveryMethod());
+        view.addDeliveryMethodButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                createDeliveryMethod();
+            }
+        });
+        view.saveDeliveryMethodButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                updateDeliveryMethod();
+            }
+        });
+        view.deleteDeliveryMethodButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                deleteDeliveryMethod();
+            }
+        });
     }
 
     private void clearDeliveryMethodForm() {
