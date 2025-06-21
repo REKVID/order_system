@@ -48,7 +48,9 @@ public class AvailableDeliveryMethodDAO {
     }
 
     public List<AvailableDeliveryMethod> findByProductId(int productId) {
-        String sql = "SELECT * FROM available_delivery_methods WHERE product_id = ?";
+        String sql = "SELECT adm.*, dm.name as delivery_method_name FROM available_delivery_methods adm " +
+                "JOIN delivery_methods dm ON adm.delivery_method_id = dm.id " +
+                "WHERE adm.product_id = ?";
         List<AvailableDeliveryMethod> methods = new ArrayList<>();
         Connection conn = DatabaseManager.getInstance().getConnection();
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -58,7 +60,8 @@ public class AvailableDeliveryMethodDAO {
                     AvailableDeliveryMethod method = new AvailableDeliveryMethod(
                             rs.getInt("product_id"),
                             rs.getInt("delivery_method_id"),
-                            rs.getBigDecimal("delivery_cost"));
+                            rs.getBigDecimal("delivery_cost"),
+                            rs.getString("delivery_method_name"));
                     methods.add(method);
                 }
             }
@@ -77,6 +80,17 @@ public class AvailableDeliveryMethodDAO {
             stmt.executeUpdate();
         } catch (SQLException e) {
             System.err.println("Ошибка удаления доступного метода доставки: " + e.getMessage());
+        }
+    }
+
+    public void deleteByProductId(int productId) {
+        String sql = "DELETE FROM available_delivery_methods WHERE product_id = ?";
+        Connection conn = DatabaseManager.getInstance().getConnection();
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, productId);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Ошибка удаления ДМД по ID продукта: " + e.getMessage());
         }
     }
 

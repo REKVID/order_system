@@ -41,19 +41,34 @@ public class ClientChoiceDAO {
     }
 
     public List<ClientChoice> findByDocumentId(int documentId) {
-        String sql = "SELECT * FROM client_choices WHERE document_id = ?";
+        String sql = "SELECT " +
+                "cc.id, cc.document_id, cc.product_id, cc.delivery_method_id, cc.quantity, " +
+                "p.name AS product_name, p.price AS product_price, " +
+                "dm.name AS delivery_method_name, " +
+                "adm.delivery_cost " +
+                "FROM client_choices cc " +
+                "JOIN products p ON cc.product_id = p.id " +
+                "LEFT JOIN delivery_methods dm ON cc.delivery_method_id = dm.id " +
+                "LEFT JOIN available_delivery_methods adm ON cc.product_id = adm.product_id AND cc.delivery_method_id = adm.delivery_method_id "
+                +
+                "WHERE cc.document_id = ?";
         List<ClientChoice> choices = new ArrayList<>();
         Connection conn = DatabaseManager.getInstance().getConnection();
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, documentId);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
+                    System.out.println(rs);
                     ClientChoice choice = new ClientChoice(
                             rs.getInt("id"),
                             rs.getInt("document_id"),
                             rs.getInt("product_id"),
                             (Integer) rs.getObject("delivery_method_id"),
-                            rs.getInt("quantity"));
+                            rs.getInt("quantity"),
+                            rs.getString("product_name"),
+                            rs.getBigDecimal("product_price"),
+                            rs.getString("delivery_method_name"),
+                            rs.getBigDecimal("delivery_cost"));
                     choices.add(choice);
                 }
             }

@@ -35,10 +35,6 @@ public class AvailableDeliveryMethods {
         availableDeliveryMethodsList.setAll(dao.findAll());
     }
 
-    public void loadByProductId(int productId) {
-        availableDeliveryMethodsList.setAll(dao.findByProductId(productId));
-    }
-
     public void create(AvailableDeliveryMethod method) {
         dao.save(method);
         availableDeliveryMethodsList.add(method);
