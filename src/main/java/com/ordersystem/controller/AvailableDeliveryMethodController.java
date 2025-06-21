@@ -3,7 +3,9 @@ package com.ordersystem.controller;
 import java.math.BigDecimal;
 
 import com.ordersystem.containers.AvailableDeliveryMethods;
+import com.ordersystem.containers.Products;
 import com.ordersystem.model.AvailableDeliveryMethod;
+import com.ordersystem.model.Product;
 import com.ordersystem.view.EmployeeMainView;
 
 import javafx.event.ActionEvent;
@@ -14,11 +16,13 @@ public class AvailableDeliveryMethodController {
 
     private final EmployeeMainView view;
     private final AvailableDeliveryMethods availableDeliveryMethodsContainer;
+    private final Products productsContainer;
 
     public AvailableDeliveryMethodController(EmployeeMainView view,
-            AvailableDeliveryMethods availableDeliveryMethodsContainer) {
+            AvailableDeliveryMethods availableDeliveryMethodsContainer, Products productsContainer) {
         this.view = view;
         this.availableDeliveryMethodsContainer = availableDeliveryMethodsContainer;
+        this.productsContainer = productsContainer;
         view.availableDeliveryMethodsTableView
                 .setItems(availableDeliveryMethodsContainer.getAvailableDeliveryMethodsList());
         setupEventHandlers();
@@ -48,6 +52,20 @@ public class AvailableDeliveryMethodController {
     private void createAvailableDeliveryMethod() {
         try {
             int productId = Integer.parseInt(view.formProductIdField.getText());
+
+            Product product = null;
+            for (Product p : productsContainer.getProductsList()) {
+                if (p.getId() == productId) {
+                    product = p;
+                    break;
+                }
+            }
+
+            if (!product.isDeliveryAvailable()) {
+                showAlert(Alert.AlertType.ERROR, "Это продукт нельзя доставлять");
+                return;
+            }
+
             int deliveryMethodId = Integer.parseInt(view.availableDeliveryMethodIdField.getText());
             BigDecimal deliveryCost = new BigDecimal(view.availableDeliveryCostField.getText());
 

@@ -36,6 +36,12 @@ public class App extends Application {
         primaryStage.setTitle(title);
     }
 
+    public static void loadLoginWindow() {
+        LoginController loginController = new LoginController();
+        Parent root = loginController.getView();
+        setRoot(root, INITIAL_WINDOW_TITLE);
+    }
+
     public static void main(String[] args) {
         launch(args);
     }

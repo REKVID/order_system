@@ -1,10 +1,10 @@
 package com.ordersystem.controller;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.ordersystem.App;
 import com.ordersystem.containers.ClientChoices;
 import com.ordersystem.containers.Products;
 import com.ordersystem.dao.AvailableDeliveryMethodDAO;
@@ -15,7 +15,6 @@ import com.ordersystem.dao.UserDAO;
 import com.ordersystem.model.AvailableDeliveryMethod;
 import com.ordersystem.model.Client;
 import com.ordersystem.model.ClientChoice;
-import com.ordersystem.model.DeliveryMethod;
 import com.ordersystem.model.Document;
 import com.ordersystem.model.Product;
 import com.ordersystem.model.User;
@@ -32,10 +31,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.util.Callback;
 
@@ -60,7 +56,7 @@ public class ClientMainController {
         this.shoppingCart = new ArrayList<>();
 
         setupEventHandlers();
-        setupCatalogTableView();
+        view.catalogTableView.setItems(Products.getInstance().getProductsList());
     }
 
     private void setupEventHandlers() {
@@ -69,14 +65,6 @@ public class ClientMainController {
             public void handle(ActionEvent event) {
                 view.showProfile();
                 loadProfileData();
-            }
-        });
-
-        view.documentsButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                view.showDocuments();
-                loadDocuments();
             }
         });
 
@@ -101,10 +89,10 @@ public class ClientMainController {
             }
         });
 
-        view.showDocumentContentButton.setOnAction(new EventHandler<ActionEvent>() {
+        view.logoutButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                showDocumentContent();
+                App.loadLoginWindow();
             }
         });
 
@@ -135,46 +123,6 @@ public class ClientMainController {
         });
     }
 
-    private class DeliveryMethodWrapper {
-        private final AvailableDeliveryMethod availableDeliveryMethod;
-        private final String displayName;
-
-        public DeliveryMethodWrapper(AvailableDeliveryMethod availableDeliveryMethod) {
-            this.availableDeliveryMethod = availableDeliveryMethod;
-            DeliveryMethod dm = deliveryMethodDAO.findById(availableDeliveryMethod.getDeliveryMethodId());
-            this.displayName = (dm != null) ? dm.getName() : "Неизвестный метод";
-        }
-
-        public AvailableDeliveryMethod getAvailableDeliveryMethod() {
-            return availableDeliveryMethod;
-        }
-
-        @Override
-        public String toString() {
-            return displayName;
-        }
-    }
-
-    private void setupCatalogTableView() {
-        TableView<Product> tableView = view.catalogTableView;
-
-        TableColumn<Product, Integer> idColumn = new TableColumn<>("ID");
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-
-        TableColumn<Product, String> nameColumn = new TableColumn<>("Название");
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-
-        TableColumn<Product, BigDecimal> priceColumn = new TableColumn<>("Цена");
-        priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
-
-        TableColumn<Product, String> descriptionColumn = new TableColumn<>("Описание");
-        descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
-
-        tableView.getColumns().clear();
-        tableView.getColumns().addAll(idColumn, nameColumn, priceColumn, descriptionColumn);
-        tableView.setItems(Products.getInstance().getProductsList());
-    }
-
     private void showAddToCartDialog(Product product) {
         Dialog<ClientChoice> dialog = new Dialog<>();
         dialog.setHeaderText("Выбор количества и способа доставки");
@@ -191,13 +139,10 @@ public class ClientMainController {
         quantityField.setPromptText("Количество");
 
         List<AvailableDeliveryMethod> availableMethods = availableDeliveryMethodDAO.findByProductId(product.getId());
-        List<DeliveryMethodWrapper> wrappedMethods = new ArrayList<>();
-        for (AvailableDeliveryMethod method : availableMethods) {
-            wrappedMethods.add(new DeliveryMethodWrapper(method));
-        }
-        ComboBox<DeliveryMethodWrapper> deliveryComboBox = new ComboBox<>(
-                FXCollections.observableArrayList(wrappedMethods));
-        if (!wrappedMethods.isEmpty()) {
+
+        ComboBox<AvailableDeliveryMethod> deliveryComboBox = new ComboBox<>(
+                FXCollections.observableArrayList(availableMethods));
+        if (!availableMethods.isEmpty()) {
             deliveryComboBox.getSelectionModel().selectFirst();
         }
 
@@ -207,7 +152,7 @@ public class ClientMainController {
         grid.add(deliveryComboBox, 1, 1);
 
         Node saveButton = dialog.getDialogPane().lookupButton(saveButtonType);
-        saveButton.setDisable(wrappedMethods.isEmpty());
+        saveButton.setDisable(availableMethods.isEmpty());
 
         dialog.getDialogPane().setContent(grid);
 
@@ -233,39 +178,7 @@ public class ClientMainController {
         }
     }
 
-    private void showDocumentContent() {
-        String idText = view.documentIdField.getText();
-        if (idText.isEmpty()) {
-            view.getClientChoicesTableView().getItems().clear();
-            return;
-        }
-
-        try {
-            int id = Integer.parseInt(idText);
-
-            boolean documentFound = false;
-            for (Document doc : view.getTableView().getItems()) {
-                if (doc.getId() == id) {
-                    documentFound = true;
-                    break;
-                }
-            }
-
-            if (documentFound) {
-                loadClientChoices(id);
-            } else {
-                showAlert(Alert.AlertType.ERROR, "Документ с ID " + id + " не найден.");
-                view.getClientChoicesTableView().getItems().clear();
-            }
-
-        } catch (NumberFormatException e) {
-            showAlert(Alert.AlertType.ERROR, "ID документа должен быть числом.");
-            view.getClientChoicesTableView().getItems().clear();
-        }
-    }
-
-    private ClientChoice createClientChoiceFromDialog(String quantityText, DeliveryMethodWrapper selectedDelivery,
-            Product product) {
+    private ClientChoice createClientChoiceFromDialog(String quantityText, AvailableDeliveryMethod selectedDelivery,Product product) {
         int quantity;
         try {
             quantity = Integer.parseInt(quantityText);
@@ -286,7 +199,7 @@ public class ClientMainController {
         ClientChoice choice = new ClientChoice();
         choice.setProductId(product.getId());
         choice.setQuantity(quantity);
-        choice.setDeliveryMethodId(selectedDelivery.getAvailableDeliveryMethod().getDeliveryMethodId());
+        choice.setDeliveryMethodId(selectedDelivery.getDeliveryMethodId());
         return choice;
     }
 
@@ -321,17 +234,6 @@ public class ClientMainController {
         } else {
             showAlert(Alert.AlertType.ERROR, "Не удалось создать документ заказа.");
         }
-    }
-
-    private void loadDocuments() {
-        List<Document> documents = documentDAO.findAllByClientId(clientId);
-        view.getTableView().setItems(FXCollections.observableArrayList(documents));
-        view.getClientChoicesTableView().getItems().clear();
-    }
-
-    private void loadClientChoices(int documentId) {
-        ClientChoices clientChoices = new ClientChoices(documentId);
-        view.getClientChoicesTableView().setItems(clientChoices.getClientChoicesList());
     }
 
     private void loadProfileData() {

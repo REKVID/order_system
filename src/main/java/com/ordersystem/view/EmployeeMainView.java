@@ -1,5 +1,7 @@
 package com.ordersystem.view;
 
+import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Date;
 
 import com.ordersystem.model.AvailableDeliveryMethod;
@@ -34,6 +36,7 @@ public class EmployeeMainView {
     public Button productsButton;
     public Button deliveryMethodsButton;
     public Button availableDeliveryMethodsButton;
+    public Button logoutButton;
 
     private Node documentsView;
     private Node productsView;
@@ -82,8 +85,11 @@ public class EmployeeMainView {
         availableDeliveryMethodsButton = new Button("Доступные способы доставки");
         ViewBaseSettings.styleNavButton(availableDeliveryMethodsButton, 200, 50);
 
+        logoutButton = new Button("Выход");
+        ViewBaseSettings.styleNavButton(logoutButton, 200, 50);
+
         VBox navigationBox = new VBox(20, documentsButton, productsButton, deliveryMethodsButton,
-                availableDeliveryMethodsButton);
+                availableDeliveryMethodsButton, logoutButton);
         navigationBox.setPadding(new Insets(30, 20, 30, 20));
         navigationBox.setAlignment(Pos.TOP_CENTER);
         navigationBox.setStyle("-fx-background-color:rgba(107, 121, 136, 0.52);");
@@ -122,14 +128,26 @@ public class EmployeeMainView {
         VBox.setMargin(clientChoicesLabel, new Insets(0, 0, 10, 0));
 
         clientChoicesTableView = new TableView<>();
-        TableColumn<ClientChoice, Integer> productIdColumn = new TableColumn<>("ID Продукта");
-        productIdColumn.setCellValueFactory(new PropertyValueFactory<>("productId"));
-        TableColumn<ClientChoice, Integer> deliveryMethodIdColumn = new TableColumn<>("ID Способа доставки");
-        deliveryMethodIdColumn.setCellValueFactory(new PropertyValueFactory<>("deliveryMethodsId"));
-        TableColumn<ClientChoice, Integer> quantityColumn = new TableColumn<>("Количество");
+        TableColumn<ClientChoice, String> productNameColumn = new TableColumn<>("Название товара");
+        productNameColumn.setCellValueFactory(new PropertyValueFactory<>("productName"));
+
+        TableColumn<ClientChoice, BigDecimal> productPriceColumn = new TableColumn<>("Цена за шт.");
+        productPriceColumn.setCellValueFactory(new PropertyValueFactory<>("productPrice"));
+
+        TableColumn<ClientChoice, Integer> quantityColumn = new TableColumn<>("Кол-во");
         quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
 
-        clientChoicesTableView.getColumns().addAll(productIdColumn, deliveryMethodIdColumn, quantityColumn);
+        TableColumn<ClientChoice, BigDecimal> totalProductsPriceColumn = new TableColumn<>("Сумма");
+        totalProductsPriceColumn.setCellValueFactory(new PropertyValueFactory<>("totalProductsPrice"));
+
+        TableColumn<ClientChoice, String> deliveryMethodNameColumn = new TableColumn<>("Доставка");
+        deliveryMethodNameColumn.setCellValueFactory(new PropertyValueFactory<>("deliveryMethodName"));
+
+        TableColumn<ClientChoice, BigDecimal> totalDeliveryCostColumn = new TableColumn<>("Сумма доставки");
+        totalDeliveryCostColumn.setCellValueFactory(new PropertyValueFactory<>("totalDeliveryCost"));
+
+        clientChoicesTableView.getColumns().setAll(Arrays.asList(productNameColumn, productPriceColumn, quantityColumn,
+                totalProductsPriceColumn, deliveryMethodNameColumn, totalDeliveryCostColumn));
 
         container.getChildren().addAll(documentsTableView, idInputBox, clientChoicesLabel, clientChoicesTableView);
         return container;
@@ -197,7 +215,6 @@ public class EmployeeMainView {
         methodIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         TableColumn<DeliveryMethod, String> methodNameCol = new TableColumn<>("Название");
         methodNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-
         deliveryMethodsTableView.getColumns().addAll(methodIdCol, methodNameCol);
 
         GridPane formGrid = new GridPane();

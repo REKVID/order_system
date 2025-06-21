@@ -48,7 +48,7 @@ public class LoginController {
                 App.setRoot(clientMainController.getView(), "Главное меню клиента");
             } else if (user.getRoleId() == 2) {
                 EmployeeMainController employeeMainController = new EmployeeMainController();
-                App.setRoot(employeeMainController.getView(), "Панель управления сотрудника");
+                App.setRoot(employeeMainController.getView(), "Главное меню сотрудника");
             }
 
         } else {
@@ -59,7 +59,6 @@ public class LoginController {
     private void handleRegisterButton() {
         String username = view.usernameField.getText();
         String password = view.passwordField.getText();
-        System.out.println("Нажата кнопка регистрации для пользователя: " + username);
 
         if (username.isEmpty() || password.isEmpty()) {
             showAlert(Alert.AlertType.ERROR, "Имя пользователя и пароль не могут быть пустыми.");

@@ -1,5 +1,6 @@
 package com.ordersystem.controller;
 
+import com.ordersystem.App;
 import com.ordersystem.containers.AvailableDeliveryMethods;
 import com.ordersystem.containers.DeliveryMethods;
 import com.ordersystem.containers.Documents;
@@ -31,7 +32,7 @@ public class EmployeeMainController {
         this.deliveryMethodController = new DeliveryMethodController(view, deliveryMethodsContainer,
                 availableDeliveryMethodsContainer);
         this.availableDeliveryMethodController = new AvailableDeliveryMethodController(view,
-                availableDeliveryMethodsContainer);
+                availableDeliveryMethodsContainer, productsContainer);
 
         setupEventHandlers();
     }
@@ -63,6 +64,12 @@ public class EmployeeMainController {
             public void handle(ActionEvent event) {
                 AvailableDeliveryMethods.getInstance().loadAll();
                 view.showAvailableDeliveryMethods();
+            }
+        });
+        view.logoutButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                App.loadLoginWindow();
             }
         });
     }

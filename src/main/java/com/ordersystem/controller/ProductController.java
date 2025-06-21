@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import com.ordersystem.containers.AvailableDeliveryMethods;
 import com.ordersystem.containers.Products;
+import com.ordersystem.dao.AvailableDeliveryMethodDAO;
 import com.ordersystem.model.Product;
 import com.ordersystem.view.EmployeeMainView;
 
@@ -114,11 +115,19 @@ public class ProductController {
             }
 
             if (productToUpdate != null) {
+                boolean oldDeliveryStatus = productToUpdate.isDeliveryAvailable();
+
                 productToUpdate.setName(name);
                 productToUpdate.setPrice(price);
                 productToUpdate.setDescription(description);
                 productToUpdate.setDeliveryAvailable(isDeliveryAvailable);
                 productsContainer.update(productToUpdate);
+
+                if (oldDeliveryStatus && !isDeliveryAvailable) {
+                    new AvailableDeliveryMethodDAO().deleteByProductId(id);
+                    availableDeliveryMethodsContainer.loadAll();
+                }
+
                 showAlert(Alert.AlertType.INFORMATION, "Товар успешно обновлен.");
                 clearProductForm();
             } else {
