@@ -14,12 +14,14 @@ public class AvailableDeliveryMethodController {
     private final AvailableDeliveryMethods availableDeliveryMethodsContainer;
     private final Products productsContainer;
 
-    public AvailableDeliveryMethodController(AvailableDeliveryMethods availableDeliveryMethodsContainer, Products productsContainer) {
+    public AvailableDeliveryMethodController(AvailableDeliveryMethods availableDeliveryMethodsContainer,
+            Products productsContainer) {
         this.availableDeliveryMethodsContainer = availableDeliveryMethodsContainer;
         this.productsContainer = productsContainer;
     }
 
-    public void createAvailableDeliveryMethod(String productIdText, String deliveryMethodIdText, String deliveryCostText) {
+    public void createAvailableDeliveryMethod(String productIdText, String deliveryMethodIdText,
+            String deliveryCostText) {
         try {
             int productId = Integer.parseInt(productIdText);
             int deliveryMethodId = Integer.parseInt(deliveryMethodIdText);
@@ -46,7 +48,8 @@ public class AvailableDeliveryMethodController {
         }
     }
 
-    public void updateAvailableDeliveryMethod(String productIdText, String deliveryMethodIdText, String deliveryCostText) {
+    public void updateAvailableDeliveryMethod(String productIdText, String deliveryMethodIdText,
+            String deliveryCostText) {
         try {
             int productId = Integer.parseInt(productIdText);
             int deliveryMethodId = Integer.parseInt(deliveryMethodIdText);
@@ -68,7 +71,12 @@ public class AvailableDeliveryMethodController {
             int deliveryMethodId = Integer.parseInt(deliveryMethodIdText);
 
             AvailableDeliveryMethod methodToDelete = new AvailableDeliveryMethod(productId, deliveryMethodId, null);
-            availableDeliveryMethodsContainer.delete(methodToDelete);
+            boolean success = availableDeliveryMethodsContainer.delete(methodToDelete);
+            if (success) {
+                showAlert(Alert.AlertType.INFORMATION, "Способ доставки удален.");
+            } else {
+                showAlert(Alert.AlertType.ERROR, "Не удалось удалить способ доставки так как он используется в сделке");
+            }
 
             showAlert(Alert.AlertType.INFORMATION, "Способ доставки удален.");
         } catch (NumberFormatException e) {

@@ -50,9 +50,14 @@ public class DeliveryMethods {
         }
     }
 
-    public void delete(DeliveryMethod method) {
-        deliveryMethodDAO.delete(method.getId());
-        deliveryMethods.remove(method);
+    public boolean delete(DeliveryMethod method) {
+        try {
+            deliveryMethodDAO.delete(method.getId());
+            deliveryMethods.remove(method);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public DeliveryMethod findById(int id) {

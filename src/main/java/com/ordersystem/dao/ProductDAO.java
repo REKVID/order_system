@@ -32,7 +32,7 @@ public class ProductDAO {
         }
     }
 
-    public void update(Product product) {
+    public void update(Product product) throws SQLException {
         String sql = "UPDATE products SET name = ?, price = ?, description = ?, is_delivery_available = ? WHERE id = ?";
         Connection conn = DatabaseManager.getInstance().getConnection();
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -68,14 +68,13 @@ public class ProductDAO {
         return products;
     }
 
-    public void delete(int id) {
+    public void delete(int id) throws SQLException {
         String sql = "DELETE FROM products WHERE id = ?";
         Connection conn = DatabaseManager.getInstance().getConnection();
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
             stmt.executeUpdate();
-        } catch (SQLException e) {
-            System.err.println("Ошибка при удалении продукта: " + e.getMessage());
         }
+        
     }
 }

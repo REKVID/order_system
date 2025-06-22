@@ -71,7 +71,11 @@ public class ProductController {
                 productsContainer.update(productToUpdate);
 
                 if (oldDeliveryStatus && !isDeliveryAvailable) {
-                    availableDeliveryMethodDAO.deleteByProductId(id);
+                    try {
+                        availableDeliveryMethodDAO.deleteByProductId(id);
+                    } catch (Exception e) {
+                        showAlert(Alert.AlertType.ERROR, "Не удалось удалить доступные методы доставки так как они используются в сделке");
+                    }
                     availableDeliveryMethodsContainer.loadAll();
                 }
 
@@ -97,11 +101,13 @@ public class ProductController {
             Product productToDelete = productsContainer.findById(id);
 
             if (productToDelete != null) {
-
-                productsContainer.delete(productToDelete);
-                availableDeliveryMethodsContainer.loadAll();
-                showAlert(Alert.AlertType.INFORMATION, "Товар успешно удален.");
-
+                boolean success = productsContainer.delete(productToDelete);
+                if (success) {
+                    availableDeliveryMethodsContainer.loadAll();
+                    showAlert(Alert.AlertType.INFORMATION, "Товар успешно удален.");
+                } else {
+                    showAlert(Alert.AlertType.ERROR, "Не удалось удалить товар так как он используется в сделке");
+                }
             } else {
                 showAlert(Alert.AlertType.ERROR, "Товар не найден.");
             }

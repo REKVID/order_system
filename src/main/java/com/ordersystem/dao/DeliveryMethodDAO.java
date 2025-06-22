@@ -82,14 +82,12 @@ public class DeliveryMethodDAO {
         return deliveryMethods;
     }
 
-    public void delete(int id) {
+    public void delete(int id) throws SQLException {
         String sql = "DELETE FROM delivery_methods WHERE id = ?";
         Connection conn = DatabaseManager.getInstance().getConnection();
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
             stmt.executeUpdate();
-        } catch (SQLException e) {
-            System.err.println("Ошибка при удалении метода доставки: " + e.getMessage());
         }
     }
 }

@@ -42,17 +42,27 @@ public class Products {
         productsList.add(product);
     }
 
-    public void update(Product product) {
-        productDAO.update(product);
-        int index = productsList.indexOf(product);
-        if (index != -1) {
-            productsList.set(index, product);
+    public boolean update(Product product) {
+        try {
+            productDAO.update(product);
+            int index = productsList.indexOf(product);
+            if (index != -1) {
+                productsList.set(index, product);
+            }
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 
-    public void delete(Product product) {
-        productDAO.delete(product.getId());
-        productsList.remove(product);
+    public boolean delete(Product product) {
+        try {
+            productDAO.delete(product.getId());
+            productsList.remove(product);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public Product findById(int id) {

@@ -57,18 +57,24 @@ public class AvailableDeliveryMethods {
         availableDeliveryMethodsList.add(method);
     }
 
-    public void delete(AvailableDeliveryMethod method) {
-        dao.delete(method.getProductId(), method.getDeliveryMethodId());
+    public boolean delete(AvailableDeliveryMethod method) {
+        try {
+            dao.delete(method.getProductId(), method.getDeliveryMethodId());
 
-        AvailableDeliveryMethod toRemove = null;
-        for (AvailableDeliveryMethod m : availableDeliveryMethodsList) {
-            if (m.getProductId() == method.getProductId() && m.getDeliveryMethodId() == method.getDeliveryMethodId()) {
-                toRemove = m;
-                break;
+            AvailableDeliveryMethod toRemove = null;
+            for (AvailableDeliveryMethod m : availableDeliveryMethodsList) {
+                if (m.getProductId() == method.getProductId()
+                        && m.getDeliveryMethodId() == method.getDeliveryMethodId()) {
+                    toRemove = m;
+                    break;
+                }
             }
-        }
-        if (toRemove != null) {
-            availableDeliveryMethodsList.remove(toRemove);
+            if (toRemove != null) {
+                availableDeliveryMethodsList.remove(toRemove);
+            }
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 }

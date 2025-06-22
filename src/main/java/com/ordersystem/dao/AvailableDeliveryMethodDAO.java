@@ -71,26 +71,22 @@ public class AvailableDeliveryMethodDAO {
         return methods;
     }
 
-    public void delete(int productId, int deliveryMethodId) {
+    public void delete(int productId, int deliveryMethodId) throws SQLException {
         String sql = "DELETE FROM available_delivery_methods WHERE product_id = ? AND delivery_method_id = ?";
         Connection conn = DatabaseManager.getInstance().getConnection();
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, productId);
             stmt.setInt(2, deliveryMethodId);
             stmt.executeUpdate();
-        } catch (SQLException e) {
-            System.err.println("Ошибка удаления доступного метода доставки: " + e.getMessage());
         }
     }
 
-    public void deleteByProductId(int productId) {
+    public void deleteByProductId(int productId) throws SQLException {
         String sql = "DELETE FROM available_delivery_methods WHERE product_id = ?";
         Connection conn = DatabaseManager.getInstance().getConnection();
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, productId);
             stmt.executeUpdate();
-        } catch (SQLException e) {
-            System.err.println("Ошибка удаления ДМД по ID продукта: " + e.getMessage());
         }
     }
 
