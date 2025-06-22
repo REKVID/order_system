@@ -2,8 +2,13 @@ package com.ordersystem.view;
 
 import java.math.BigDecimal;
 
+import com.ordersystem.controller.ClientMainController;
 import com.ordersystem.model.Product;
+import com.ordersystem.model.Client;
+import com.ordersystem.model.User;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -16,17 +21,20 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 public class ClientMainView {
     private BorderPane view;
+    private ClientMainController controller;
+
     public Button profileButton;
     public Button catalogButton;
     public Button saveProfileButton;
     public Button placeOrderButton;
     public Button addToCartButton;
     public TextField productIdField;
+    public TextField quantityField;
+    public TextField deliveryMethodField;
     public Button logoutButton;
 
     private Node profileView;
@@ -40,7 +48,8 @@ public class ClientMainView {
     public TextField loginField;
     public PasswordField passwordField;
 
-    public ClientMainView() {
+    public ClientMainView(ClientMainController controller) {
+        this.controller = controller;
         view = new BorderPane();
 
         profileButton = new Button("Профиль");
@@ -61,6 +70,7 @@ public class ClientMainView {
         profileView = createProfileView();
         catalogView = createCatalogView();
         view.setCenter(catalogView);
+        setupEventHandlers();
     }
 
     private Node createCatalogView() {
@@ -68,14 +78,20 @@ public class ClientMainView {
 
         catalogTableView = new TableView<>();
         setupCatalogTableView();
-        VBox.setVgrow(catalogTableView, Priority.ALWAYS);
 
         HBox actionBox = new HBox(10);
         actionBox.setAlignment(Pos.CENTER);
         productIdField = new TextField();
-        productIdField.setPromptText("Введите ID товара");
-        addToCartButton = new Button("Выбрать параметры и добавить");
-        actionBox.getChildren().addAll(productIdField, addToCartButton);
+        productIdField.setPromptText("Введите название товара");
+
+        quantityField = new TextField();
+        quantityField.setPromptText("Количество");
+
+        deliveryMethodField = new TextField();
+        deliveryMethodField.setPromptText("Метод доставки");
+
+        addToCartButton = new Button("Добавить в корзину");
+        actionBox.getChildren().addAll(productIdField, quantityField, deliveryMethodField, addToCartButton);
 
         placeOrderButton = new Button("Оформить заказ");
         ViewBaseSettings.stylePrimaryButton(placeOrderButton);
@@ -127,6 +143,71 @@ public class ClientMainView {
                 contactPersonField,
                 saveProfileButton);
         return container;
+    }
+
+    public void fillProfileData(User user, Client client) {
+
+        loginField.setText(user.getUsername());
+        passwordField.setText(user.getPassword());
+
+        nameField.setText(client.getName());
+        phoneField.setText(client.getPhone());
+        addressField.setText(client.getAddress());
+        contactPersonField.setText(client.getContactPerson());
+
+    }
+
+    private void setupEventHandlers() {
+        profileButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                controller.handleShowProfile();
+            }
+        });
+
+        catalogButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                controller.handleShowCatalog();
+            }
+        });
+
+        saveProfileButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                controller.handleSaveProfile(
+                        loginField.getText(),
+                        passwordField.getText(),
+                        nameField.getText(),
+                        phoneField.getText(),
+                        addressField.getText(),
+                        contactPersonField.getText());
+            }
+        });
+
+        placeOrderButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                controller.handleMakeDeal();
+            }
+        });
+
+        logoutButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                controller.handleLogout();
+            }
+        });
+
+        addToCartButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                controller.handleAddToDeal(
+                        productIdField.getText(),
+                        quantityField.getText(),
+                        deliveryMethodField.getText());
+            }
+        });
     }
 
     public void showProfile() {

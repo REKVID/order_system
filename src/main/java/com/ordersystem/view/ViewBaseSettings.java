@@ -25,7 +25,6 @@ public final class ViewBaseSettings {
         titleLabel.setFont(new Font(48.0));
         VBox.setMargin(titleLabel, new Insets(0, 0, 20, 0));
 
-        container.getChildren().add(titleLabel);
         return container;
     }
 
