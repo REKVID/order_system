@@ -46,6 +46,7 @@ CREATE TABLE document (
     FOREIGN KEY (client_id) REFERENCES clients(id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
+
 CREATE TABLE client_choices ( 
     id INT AUTO_INCREMENT PRIMARY KEY,                  
     document_id INT NOT NULL,                           
@@ -53,8 +54,8 @@ CREATE TABLE client_choices (
     delivery_method_id INT NULL,                       
     quantity INT NOT NULL CHECK (quantity > 0),         
     FOREIGN KEY (document_id) REFERENCES document(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE RESTRICT ON UPDATE CASCADE,
-    FOREIGN KEY (delivery_method_id) REFERENCES delivery_methods(id) ON DELETE SET NULL ON UPDATE CASCADE
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE RESTRICT ON UPDATE RESTRICT,
+    FOREIGN KEY (delivery_method_id) REFERENCES delivery_methods(id) ON DELETE RESTRICT ON UPDATE RESTRICT
 );
 
 CREATE TABLE roles (
