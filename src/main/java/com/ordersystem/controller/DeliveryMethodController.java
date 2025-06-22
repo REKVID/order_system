@@ -3,59 +3,21 @@ package com.ordersystem.controller;
 import com.ordersystem.containers.AvailableDeliveryMethods;
 import com.ordersystem.containers.DeliveryMethods;
 import com.ordersystem.model.DeliveryMethod;
-import com.ordersystem.view.EmployeeMainView;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 
 public class DeliveryMethodController {
 
-    private final EmployeeMainView view;
     private final DeliveryMethods deliveryMethodsContainer;
     private final AvailableDeliveryMethods availableDeliveryMethodsContainer;
 
-    public DeliveryMethodController(EmployeeMainView view, DeliveryMethods deliveryMethodsContainer,
+    public DeliveryMethodController(DeliveryMethods deliveryMethodsContainer,
             AvailableDeliveryMethods availableDeliveryMethodsContainer) {
-        this.view = view;
         this.deliveryMethodsContainer = deliveryMethodsContainer;
         this.availableDeliveryMethodsContainer = availableDeliveryMethodsContainer;
-        view.deliveryMethodsTableView.setItems(deliveryMethodsContainer.getDeliveryMethods());
-        setupEventHandlers();
     }
 
-    private void setupEventHandlers() {
-        view.addDeliveryMethodButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                createDeliveryMethod();
-            }
-        });
-        view.saveDeliveryMethodButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                updateDeliveryMethod();
-            }
-        });
-        view.deleteDeliveryMethodButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                deleteDeliveryMethod();
-            }
-        });
-    }
-
-    private void clearDeliveryMethodForm() {
-        view.deliveryMethodIdField.clear();
-        view.deliveryMethodNameField.clear();
-    }
-
-    private void createDeliveryMethod() {
-        if (!view.deliveryMethodIdField.getText().isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, "ID должен быть пустым для нового способа доставки.");
-            return;
-        }
-        String name = view.deliveryMethodNameField.getText();
+    public void createDeliveryMethod(String name) {
         if (name.isEmpty()) {
             showAlert(Alert.AlertType.ERROR, "Название способа доставки не может быть пустым.");
             return;
@@ -65,17 +27,14 @@ public class DeliveryMethodController {
         newMethod.setName(name);
         deliveryMethodsContainer.create(newMethod);
         showAlert(Alert.AlertType.INFORMATION, "Новый способ доставки создан.");
-        clearDeliveryMethodForm();
     }
 
-    private void updateDeliveryMethod() {
-        String idText = view.deliveryMethodIdField.getText();
+    public void updateDeliveryMethod(String idText, String name) {
         if (idText.isEmpty()) {
             showAlert(Alert.AlertType.ERROR, "Для обновления необходимо указать ID.");
             return;
         }
 
-        String name = view.deliveryMethodNameField.getText();
         if (name.isEmpty()) {
             showAlert(Alert.AlertType.ERROR, "Название способа доставки не может быть пустым.");
             return;
@@ -84,29 +43,21 @@ public class DeliveryMethodController {
         try {
             int id = Integer.parseInt(idText);
 
-            DeliveryMethod methodToUpdate = null;
-            for (DeliveryMethod m : deliveryMethodsContainer.getDeliveryMethods()) {
-                if (m.getId() == id) {
-                    methodToUpdate = m;
-                    break;
-                }
-            }
+            DeliveryMethod methodToUpdate = deliveryMethodsContainer.findById(id);
 
             if (methodToUpdate != null) {
                 methodToUpdate.setName(name);
                 deliveryMethodsContainer.update(methodToUpdate);
                 showAlert(Alert.AlertType.INFORMATION, "Способ доставки обновлен.");
-                clearDeliveryMethodForm();
             } else {
-                showAlert(Alert.AlertType.ERROR, "Способ доставки с ID " + id + " не найден.");
+                showAlert(Alert.AlertType.ERROR, "Способ доставки не найден.");
             }
         } catch (NumberFormatException e) {
             showAlert(Alert.AlertType.ERROR, "ID должен быть числом.");
         }
     }
 
-    private void deleteDeliveryMethod() {
-        String idText = view.deliveryMethodIdField.getText();
+    public void deleteDeliveryMethod(String idText) {
         if (idText.isEmpty()) {
             showAlert(Alert.AlertType.WARNING, "Пожалуйста, введите ID для удаления.");
             return;
@@ -115,21 +66,14 @@ public class DeliveryMethodController {
         try {
             int id = Integer.parseInt(idText);
 
-            DeliveryMethod methodToDelete = null;
-            for (DeliveryMethod m : deliveryMethodsContainer.getDeliveryMethods()) {
-                if (m.getId() == id) {
-                    methodToDelete = m;
-                    break;
-                }
-            }
+            DeliveryMethod methodToDelete = deliveryMethodsContainer.findById(id);
 
             if (methodToDelete != null) {
                 deliveryMethodsContainer.delete(methodToDelete);
                 availableDeliveryMethodsContainer.loadAll();
                 showAlert(Alert.AlertType.INFORMATION, "Способ доставки удален.");
-                clearDeliveryMethodForm();
             } else {
-                showAlert(Alert.AlertType.ERROR, "Способ доставки с ID " + id + " не найден.");
+                showAlert(Alert.AlertType.ERROR, "Способ доставки не найден.");
             }
         } catch (NumberFormatException e) {
             showAlert(Alert.AlertType.ERROR, "ID должен быть числом.");
