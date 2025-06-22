@@ -2,37 +2,20 @@ package com.ordersystem.controller;
 
 import com.ordersystem.containers.Documents;
 import com.ordersystem.model.Document;
-import com.ordersystem.view.EmployeeMainView;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 
 public class DocumentController {
 
-    private final EmployeeMainView view;
     private final Documents documentsContainer;
 
-    public DocumentController(EmployeeMainView view, Documents documentsContainer) {
-        this.view = view;
+    public DocumentController(Documents documentsContainer) {
         this.documentsContainer = documentsContainer;
-        view.documentsTableView.setItems(documentsContainer.getDocuments());
-        view.clientChoicesTableView.setItems(documentsContainer.getSelectedDocumentChoices());
-        setupEventHandlers();
     }
 
-    private void setupEventHandlers() {
-        view.showDocumentContentButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                showDocumentContent();
-            }
-        });
-    }
-
-    private void showDocumentContent() {
-        String idText = view.documentIdField.getText();
+    public void showDocumentContent(String idText) {
         if (idText.isEmpty()) {
+            documentsContainer.loadChoicesFor(null);
             return;
         }
 
