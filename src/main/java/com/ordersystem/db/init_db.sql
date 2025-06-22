@@ -10,7 +10,7 @@ DROP TABLE IF EXISTS clients;
 
 CREATE TABLE clients (
     id INT AUTO_INCREMENT PRIMARY KEY, 
-    name VARCHAR(50) NOT NULL, 
+    name VARCHAR(50), 
     phone VARCHAR(50), 
     address VARCHAR(50), 
     contact_person VARCHAR(50)         
@@ -35,8 +35,8 @@ CREATE TABLE available_delivery_methods (
     delivery_method_id INT,             
     delivery_cost DECIMAL(10, 2) NOT NULL, 
     PRIMARY KEY (product_id, delivery_method_id),
-    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (delivery_method_id) REFERENCES delivery_methods(id) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE RESTRICT ON UPDATE RESTRICT,
+    FOREIGN KEY (delivery_method_id) REFERENCES delivery_methods(id) ON DELETE RESTRICT ON UPDATE RESTRICT
 );
 
 CREATE TABLE document (
