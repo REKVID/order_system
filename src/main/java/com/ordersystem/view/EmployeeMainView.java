@@ -4,12 +4,19 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Date;
 
+import com.ordersystem.containers.AvailableDeliveryMethods;
+import com.ordersystem.containers.DeliveryMethods;
+import com.ordersystem.containers.Documents;
+import com.ordersystem.containers.Products;
+import com.ordersystem.controller.EmployeeMainController;
 import com.ordersystem.model.AvailableDeliveryMethod;
 import com.ordersystem.model.ClientChoice;
 import com.ordersystem.model.DeliveryMethod;
 import com.ordersystem.model.Document;
 import com.ordersystem.model.Product;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -31,6 +38,7 @@ import javafx.scene.text.Font;
 public class EmployeeMainView {
 
     private BorderPane view;
+    private EmployeeMainController controller;
 
     public Button documentsButton;
     public Button productsButton;
@@ -73,7 +81,8 @@ public class EmployeeMainView {
     public Button saveAvailableDeliveryMethodButton;
     public Button deleteAvailableDeliveryMethodButton;
 
-    public EmployeeMainView() {
+    public EmployeeMainView(EmployeeMainController controller) {
+        this.controller = controller;
         view = new BorderPane();
 
         documentsButton = new Button("Документы");
@@ -88,8 +97,10 @@ public class EmployeeMainView {
         logoutButton = new Button("Выход");
         ViewBaseSettings.styleNavButton(logoutButton, 200, 50);
 
-        VBox navigationBox = new VBox(20, documentsButton, productsButton, deliveryMethodsButton,
+        VBox navigationBox = new VBox(20, 
+                documentsButton, productsButton, deliveryMethodsButton,
                 availableDeliveryMethodsButton, logoutButton);
+
         navigationBox.setPadding(new Insets(30, 20, 30, 20));
         navigationBox.setAlignment(Pos.TOP_CENTER);
         navigationBox.setStyle("-fx-background-color:rgba(107, 121, 136, 0.52);");
@@ -102,6 +113,133 @@ public class EmployeeMainView {
         availableDeliveryMethodsView = createAvailableDeliveryMethodsView();
 
         view.setCenter(documentsView);
+
+        setupEventHandlers();
+        setupTableViews();
+    }
+
+    private void setupTableViews() {
+        documentsTableView.setItems(Documents.getInstance().getDocuments());
+        clientChoicesTableView.setItems(Documents.getInstance().getSelectedDocumentChoices());
+        productsTableView.setItems(Products.getInstance().getProductsList());
+        deliveryMethodsTableView.setItems(DeliveryMethods.getInstance().getDeliveryMethods());
+        availableDeliveryMethodsTableView.setItems(AvailableDeliveryMethods.getInstance().getAvailableDeliveryMethodsList());
+    }
+
+    private void setupEventHandlers() {
+        documentsButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                controller.handleShowDocuments();
+            }
+        });
+        productsButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                controller.handleShowProducts();
+            }
+        });
+        deliveryMethodsButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                controller.handleShowDeliveryMethods();
+            }
+        });
+        availableDeliveryMethodsButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                controller.handleShowAvailableDeliveryMethods();
+            }
+        });
+        logoutButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                controller.handleLogout();
+            }
+        });
+
+        showDocumentContentButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                controller.handleShowDocumentContent(documentIdField.getText());
+            }
+        });
+
+        addProductButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                controller.handleCreateProduct(
+                        productNameField.getText(),
+                        productPriceField.getText(),
+                        productDescriptionArea.getText(),
+                        productDeliveryAvailableCheckBox.isSelected());
+            }
+        });
+        saveProductButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                controller.handleUpdateProduct(
+                        productIdField.getText(),
+                        productNameField.getText(),
+                        productPriceField.getText(),
+                        productDescriptionArea.getText(),
+                        productDeliveryAvailableCheckBox.isSelected());
+            }
+        });
+        deleteProductButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                controller.handleDeleteProduct(productIdField.getText());
+            }
+        });
+
+        addDeliveryMethodButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                controller.handleCreateDeliveryMethod(deliveryMethodNameField.getText());
+            }
+        });
+        saveDeliveryMethodButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                controller.handleUpdateDeliveryMethod(
+                        deliveryMethodIdField.getText(),
+                        deliveryMethodNameField.getText());
+            }
+        });
+        deleteDeliveryMethodButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                controller.handleDeleteDeliveryMethod(deliveryMethodIdField.getText());
+            }
+        });
+
+        addAvailableDeliveryMethodButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                controller.handleCreateAvailableDeliveryMethod(
+                        formProductIdField.getText(),
+                        availableDeliveryMethodIdField.getText(),
+                        availableDeliveryCostField.getText());
+            }
+        });
+        saveAvailableDeliveryMethodButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                controller.handleUpdateAvailableDeliveryMethod(
+                        formProductIdField.getText(),
+                        availableDeliveryMethodIdField.getText(),
+                        availableDeliveryCostField.getText());
+            }
+        });
+        deleteAvailableDeliveryMethodButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                controller.handleDeleteAvailableDeliveryMethod(
+                        formProductIdField.getText(),
+                        availableDeliveryMethodIdField.getText());
+            }
+        });
     }
 
     private Node createDocumentsView() {
