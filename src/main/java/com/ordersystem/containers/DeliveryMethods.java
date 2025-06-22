@@ -54,4 +54,13 @@ public class DeliveryMethods {
         deliveryMethodDAO.delete(method.getId());
         deliveryMethods.remove(method);
     }
+
+    public DeliveryMethod findById(int id) {
+        for (DeliveryMethod method : deliveryMethods) {
+            if (method.getId() == id) {
+                return method;
+            }
+        }
+        return null;
+    }
 }

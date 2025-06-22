@@ -80,8 +80,10 @@ public class LoginController {
         Integer newClientId = null;
         if (selectedRole.getName().equalsIgnoreCase("client")) {
             Client newClient = new Client();
+            newClient.setName(username);
             clientDAO.create(newClient);
             newClientId = newClient.getId();
+            clientDAO.update(newClient);
         }
 
         try {

@@ -54,4 +54,13 @@ public class Products {
         productDAO.delete(product.getId());
         productsList.remove(product);
     }
+
+    public Product findById(int id) {
+        for (Product p : productsList) {
+            if (p.getId() == id) {
+                return p;
+            }
+        }
+        return null;
+    }
 }

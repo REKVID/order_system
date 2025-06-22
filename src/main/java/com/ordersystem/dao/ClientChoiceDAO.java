@@ -58,7 +58,6 @@ public class ClientChoiceDAO {
             stmt.setInt(1, documentId);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    System.out.println(rs);
                     ClientChoice choice = new ClientChoice(
                             rs.getInt("id"),
                             rs.getInt("document_id"),
