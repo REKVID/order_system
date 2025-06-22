@@ -247,25 +247,28 @@ public class EmployeeMainView {
     }
 
     private Node createDocumentsView() {
-        VBox container = ViewBaseSettings.createBaseViewContainer("Все заказы", 20);
+        VBox container = ViewBaseSettings.createBaseViewContainer("Документы по сделкам", 20);
 
         documentsTableView = new TableView<>();
-        TableColumn<Document, Integer> docIdColumn = new TableColumn<>("ID Заказа");
+        TableColumn<Document, Integer> docIdColumn = new TableColumn<>("ID сделки");
         docIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+
         TableColumn<Document, Integer> clientIdColumn = new TableColumn<>("ID Клиента");
         clientIdColumn.setCellValueFactory(new PropertyValueFactory<>("clientId"));
+
         TableColumn<Document, Date> dateColumn = new TableColumn<>("Дата");
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
-        documentsTableView.getColumns().addAll(docIdColumn, clientIdColumn, dateColumn);
+
+        documentsTableView.getColumns().setAll(docIdColumn, clientIdColumn, dateColumn);
 
         documentIdField = new TextField();
-        documentIdField.setPromptText("Введите ID заказа");
-        showDocumentContentButton = new Button("Показать состав заказа");
-        HBox idInputBox = new HBox(10, new Label("ID Заказа:"), documentIdField, showDocumentContentButton);
+        documentIdField.setPromptText("Введите ID сделки");
+        showDocumentContentButton = new Button("Показать состав сделки");
+        HBox idInputBox = new HBox(10, new Label("ID сделки:"), documentIdField, showDocumentContentButton);
         idInputBox.setAlignment(Pos.CENTER);
         VBox.setMargin(idInputBox, new Insets(20, 0, 20, 0));
 
-        Label clientChoicesLabel = new Label("Состав заказа");
+        Label clientChoicesLabel = new Label("Состав сделки");
         clientChoicesLabel.setFont(new Font(24.0));
         VBox.setMargin(clientChoicesLabel, new Insets(0, 0, 10, 0));
 
@@ -291,7 +294,7 @@ public class EmployeeMainView {
         clientChoicesTableView.getColumns().setAll(Arrays.asList(productNameColumn, productPriceColumn, quantityColumn,
                 totalProductsPriceColumn, deliveryMethodNameColumn, totalDeliveryCostColumn));
 
-        container.getChildren().addAll(documentsTableView, idInputBox, clientChoicesLabel, clientChoicesTableView);
+        container.getChildren().setAll(documentsTableView, idInputBox, clientChoicesLabel, clientChoicesTableView);
         return container;
     }
 
@@ -311,7 +314,7 @@ public class EmployeeMainView {
         TableColumn<Product, Boolean> productDeliveryCol = new TableColumn<>("Доставка");
         productDeliveryCol.setCellValueFactory(new PropertyValueFactory<>("deliveryAvailable"));
 
-        productsTableView.getColumns().addAll(productIdCol, productNameCol, productPriceCol, productDeliveryCol);
+        productsTableView.getColumns().setAll(productIdCol, productNameCol, productPriceCol, productDeliveryCol);
 
         GridPane formGrid = new GridPane();
         formGrid.setHgap(10);
@@ -345,7 +348,7 @@ public class EmployeeMainView {
         HBox buttonBox = new HBox(10, addProductButton, saveProductButton, deleteProductButton);
         buttonBox.setAlignment(Pos.CENTER);
 
-        container.getChildren().addAll(productsTableView, formGrid, buttonBox);
+        container.getChildren().setAll(productsTableView, formGrid, buttonBox);
         return container;
     }
 
@@ -363,7 +366,7 @@ public class EmployeeMainView {
         TableColumn<DeliveryMethod, Integer> methodSpeedDaysCol = new TableColumn<>("Скорость доставки");
         methodSpeedDaysCol.setCellValueFactory(new PropertyValueFactory<>("speedDays"));
 
-        deliveryMethodsTableView.getColumns().addAll(methodIdCol, methodNameCol, methodSpeedDaysCol);
+        deliveryMethodsTableView.getColumns().setAll(methodIdCol, methodNameCol, methodSpeedDaysCol);
 
         GridPane formGrid = new GridPane();
         formGrid.setHgap(10);
@@ -393,7 +396,7 @@ public class EmployeeMainView {
         HBox buttonBox = new HBox(10, addDeliveryMethodButton, saveDeliveryMethodButton, deleteDeliveryMethodButton);
         buttonBox.setAlignment(Pos.CENTER);
 
-        container.getChildren().addAll(deliveryMethodsTableView, formGrid, buttonBox);
+        container.getChildren().setAll(deliveryMethodsTableView, formGrid, buttonBox);
         return container;
     }
 
@@ -401,19 +404,16 @@ public class EmployeeMainView {
         VBox container = ViewBaseSettings.createBaseViewContainer("Доступные способы доставки", 20);
 
         availableDeliveryMethodsTableView = new TableView<>();
-        TableColumn<AvailableDeliveryMethod, Integer> productIdCol = new TableColumn<>(
-                "ID Продукта");
+        TableColumn<AvailableDeliveryMethod, Integer> productIdCol = new TableColumn<>("ID Продукта");
         productIdCol.setCellValueFactory(new PropertyValueFactory<>("productId"));
 
-        TableColumn<AvailableDeliveryMethod, Integer> deliveryMethodIdCol = new TableColumn<>(
-                "ID Способа доставки");
+        TableColumn<AvailableDeliveryMethod, Integer> deliveryMethodIdCol = new TableColumn<>("ID Способа доставки");
         deliveryMethodIdCol.setCellValueFactory(new PropertyValueFactory<>("deliveryMethodId"));
 
-        TableColumn<AvailableDeliveryMethod, Double> deliveryCostCol = new TableColumn<>(
-                "Стоимость доставки");
+        TableColumn<AvailableDeliveryMethod, Double> deliveryCostCol = new TableColumn<>("Стоимость доставки");
         deliveryCostCol.setCellValueFactory(new PropertyValueFactory<>("deliveryCost"));
 
-        availableDeliveryMethodsTableView.getColumns().addAll(productIdCol, deliveryMethodIdCol, deliveryCostCol);
+        availableDeliveryMethodsTableView.getColumns().setAll(productIdCol, deliveryMethodIdCol, deliveryCostCol);
 
         GridPane formGrid = new GridPane();
         formGrid.setHgap(10);
@@ -441,7 +441,7 @@ public class EmployeeMainView {
                 deleteAvailableDeliveryMethodButton);
         buttonBox.setAlignment(Pos.CENTER);
 
-        container.getChildren().addAll(availableDeliveryMethodsTableView, formGrid, buttonBox);
+        container.getChildren().setAll(availableDeliveryMethodsTableView, formGrid, buttonBox);
         return container;
     }
 

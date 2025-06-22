@@ -35,6 +35,8 @@ public class EmployeeMainController {
         this.view = new EmployeeMainView(this);
     }
 
+
+    //отображение таблиц
     public void handleShowDocuments() {
         Documents.getInstance().loadAll();
         view.showDocuments();
@@ -66,6 +68,8 @@ public class EmployeeMainController {
         documentController.showDocumentContent(idText);
     }
 
+    // Товары
+
     public void handleCreateProduct(String name, String priceText, String description, boolean isDeliveryAvailable) {
         productController.createProduct(name, priceText, description, isDeliveryAvailable);
     }
@@ -79,6 +83,9 @@ public class EmployeeMainController {
         productController.deleteProduct(idText);
     }
 
+
+    // Способов доставки
+
     public void handleCreateDeliveryMethod(String name, String speedDays) {
         deliveryMethodController.createDeliveryMethod(name, speedDays);
     }
@@ -90,6 +97,8 @@ public class EmployeeMainController {
     public void handleDeleteDeliveryMethod(String idText) {
         deliveryMethodController.deleteDeliveryMethod(idText);
     }
+
+    // Доступных методов доставки
 
     public void handleCreateAvailableDeliveryMethod(String productIdText, String deliveryMethodIdText,
             String deliveryCostText) {

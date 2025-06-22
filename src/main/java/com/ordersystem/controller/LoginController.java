@@ -6,11 +6,11 @@ import com.ordersystem.dao.UserDAO;
 import com.ordersystem.model.Client;
 import com.ordersystem.model.Role;
 import com.ordersystem.model.User;
+
 import javafx.collections.FXCollections;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
-import javafx.util.StringConverter;
 
 public class LoginController {
     private final Stage stage;
@@ -27,17 +27,6 @@ public class LoginController {
 
     public void loadRoles(ComboBox<Role> roleComboBox) {
         roleComboBox.setItems(FXCollections.observableArrayList(roleDAO.findAll()));
-        roleComboBox.setConverter(new StringConverter<Role>() {
-            @Override
-            public String toString(Role role) {
-                return role == null ? "" : role.getName();
-            }
-
-            @Override
-            public Role fromString(String string) {
-                return null;
-            }
-        });
     }
 
     public void handleLoginButton(String username, String password) {

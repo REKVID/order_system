@@ -11,8 +11,7 @@ public class DeliveryMethodController {
     private final DeliveryMethods deliveryMethodsContainer;
     private final AvailableDeliveryMethods availableDeliveryMethodsContainer;
 
-    public DeliveryMethodController(DeliveryMethods deliveryMethodsContainer,
-            AvailableDeliveryMethods availableDeliveryMethodsContainer) {
+    public DeliveryMethodController(DeliveryMethods deliveryMethodsContainer,AvailableDeliveryMethods availableDeliveryMethodsContainer) {
         this.deliveryMethodsContainer = deliveryMethodsContainer;
         this.availableDeliveryMethodsContainer = availableDeliveryMethodsContainer;
     }

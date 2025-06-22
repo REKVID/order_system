@@ -35,7 +35,7 @@ public class AvailableDeliveryMethodController {
             }
 
             if (!product.isDeliveryAvailable()) {
-                showAlert(Alert.AlertType.ERROR, "Для этого продукта доставка не запрещена.");
+                showAlert(Alert.AlertType.ERROR, "Для этого продукта доставка запрещена.");
                 return;
             }
 

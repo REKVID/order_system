@@ -90,7 +90,7 @@ public class ClientMainView {
         deliveryMethodField = new TextField();
         deliveryMethodField.setPromptText("Метод доставки");
 
-        addToCartButton = new Button("Добавить в корзину");
+        addToCartButton = new Button("Добавить в сделку");
         actionBox.getChildren().addAll(productIdField, quantityField, deliveryMethodField, addToCartButton);
 
         placeOrderButton = new Button("Оформить заказ");
@@ -134,14 +134,13 @@ public class ClientMainView {
         addressField = new TextField();
         ViewBaseSettings.styleTextField(addressField, "Адрес доставки");
         contactPersonField = new TextField();
-        ViewBaseSettings.styleTextField(contactPersonField, "Контактное лицо (ФИО)");
+        ViewBaseSettings.styleTextField(contactPersonField, "Контактное лицо");
 
         saveProfileButton = new Button("Сохранить изменения");
         ViewBaseSettings.stylePrimaryButton(saveProfileButton);
 
-        container.getChildren().addAll(loginField, passwordField, nameField, phoneField, addressField,
-                contactPersonField,
-                saveProfileButton);
+        container.getChildren().addAll(loginField, passwordField, nameField,
+                phoneField, addressField, contactPersonField, saveProfileButton);
         return container;
     }
 
