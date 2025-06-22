@@ -17,7 +17,7 @@ public class DeliveryMethodController {
         this.availableDeliveryMethodsContainer = availableDeliveryMethodsContainer;
     }
 
-    public void createDeliveryMethod(String name) {
+    public void createDeliveryMethod(String name, String speedDays) {
         if (name.isEmpty()) {
             showAlert(Alert.AlertType.ERROR, "Название способа доставки не может быть пустым.");
             return;
@@ -25,11 +25,12 @@ public class DeliveryMethodController {
 
         DeliveryMethod newMethod = new DeliveryMethod();
         newMethod.setName(name);
+        newMethod.setSpeedDays(Integer.parseInt(speedDays));
         deliveryMethodsContainer.create(newMethod);
         showAlert(Alert.AlertType.INFORMATION, "Новый способ доставки создан.");
     }
 
-    public void updateDeliveryMethod(String idText, String name) {
+    public void updateDeliveryMethod(String idText, String name, String speedDays) {
         if (idText.isEmpty()) {
             showAlert(Alert.AlertType.ERROR, "Для обновления необходимо указать ID.");
             return;
@@ -47,6 +48,7 @@ public class DeliveryMethodController {
 
             if (methodToUpdate != null) {
                 methodToUpdate.setName(name);
+                methodToUpdate.setSpeedDays(Integer.parseInt(speedDays));
                 deliveryMethodsContainer.update(methodToUpdate);
                 showAlert(Alert.AlertType.INFORMATION, "Способ доставки обновлен.");
             } else {
@@ -69,9 +71,14 @@ public class DeliveryMethodController {
             DeliveryMethod methodToDelete = deliveryMethodsContainer.findById(id);
 
             if (methodToDelete != null) {
-                deliveryMethodsContainer.delete(methodToDelete);
-                availableDeliveryMethodsContainer.loadAll();
-                showAlert(Alert.AlertType.INFORMATION, "Способ доставки удален.");
+                boolean success = deliveryMethodsContainer.delete(methodToDelete);
+                if (success) {
+                    availableDeliveryMethodsContainer.loadAll();
+                    showAlert(Alert.AlertType.INFORMATION, "Способ доставки удален.");
+                } else {
+                    showAlert(Alert.AlertType.ERROR,
+                            "Не удалось удалить способ доставки так как он используется в сделке");
+                }
             } else {
                 showAlert(Alert.AlertType.ERROR, "Способ доставки не найден.");
             }

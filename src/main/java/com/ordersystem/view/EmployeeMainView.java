@@ -72,6 +72,7 @@ public class EmployeeMainView {
     public Button addDeliveryMethodButton;
     public Button saveDeliveryMethodButton;
     public Button deleteDeliveryMethodButton;
+    public TextField deliveryMethodSpeedDaysField;
 
     public TableView<AvailableDeliveryMethod> availableDeliveryMethodsTableView;
     public TextField formProductIdField;
@@ -97,7 +98,7 @@ public class EmployeeMainView {
         logoutButton = new Button("Выход");
         ViewBaseSettings.styleNavButton(logoutButton, 200, 50);
 
-        VBox navigationBox = new VBox(20, 
+        VBox navigationBox = new VBox(20,
                 documentsButton, productsButton, deliveryMethodsButton,
                 availableDeliveryMethodsButton, logoutButton);
 
@@ -123,7 +124,8 @@ public class EmployeeMainView {
         clientChoicesTableView.setItems(Documents.getInstance().getSelectedDocumentChoices());
         productsTableView.setItems(Products.getInstance().getProductsList());
         deliveryMethodsTableView.setItems(DeliveryMethods.getInstance().getDeliveryMethods());
-        availableDeliveryMethodsTableView.setItems(AvailableDeliveryMethods.getInstance().getAvailableDeliveryMethodsList());
+        availableDeliveryMethodsTableView
+                .setItems(AvailableDeliveryMethods.getInstance().getAvailableDeliveryMethodsList());
     }
 
     private void setupEventHandlers() {
@@ -196,7 +198,8 @@ public class EmployeeMainView {
         addDeliveryMethodButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                controller.handleCreateDeliveryMethod(deliveryMethodNameField.getText());
+                controller.handleCreateDeliveryMethod(deliveryMethodNameField.getText(),
+                        deliveryMethodSpeedDaysField.getText());
             }
         });
         saveDeliveryMethodButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -204,7 +207,8 @@ public class EmployeeMainView {
             public void handle(ActionEvent event) {
                 controller.handleUpdateDeliveryMethod(
                         deliveryMethodIdField.getText(),
-                        deliveryMethodNameField.getText());
+                        deliveryMethodNameField.getText(),
+                        deliveryMethodSpeedDaysField.getText());
             }
         });
         deleteDeliveryMethodButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -349,11 +353,17 @@ public class EmployeeMainView {
         VBox container = ViewBaseSettings.createBaseViewContainer("Способы доставки", 20);
 
         deliveryMethodsTableView = new TableView<>();
+
         TableColumn<DeliveryMethod, Integer> methodIdCol = new TableColumn<>("ID");
         methodIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+
         TableColumn<DeliveryMethod, String> methodNameCol = new TableColumn<>("Название");
         methodNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-        deliveryMethodsTableView.getColumns().addAll(methodIdCol, methodNameCol);
+
+        TableColumn<DeliveryMethod, Integer> methodSpeedDaysCol = new TableColumn<>("Скорость доставки");
+        methodSpeedDaysCol.setCellValueFactory(new PropertyValueFactory<>("speedDays"));
+
+        deliveryMethodsTableView.getColumns().addAll(methodIdCol, methodNameCol, methodSpeedDaysCol);
 
         GridPane formGrid = new GridPane();
         formGrid.setHgap(10);
@@ -364,11 +374,17 @@ public class EmployeeMainView {
         deliveryMethodIdField.setPromptText("ID (пусто для нового)");
         deliveryMethodNameField = new TextField();
         deliveryMethodNameField.setPromptText("Название способа доставки");
+        deliveryMethodSpeedDaysField = new TextField();
+        deliveryMethodSpeedDaysField.setPromptText("Скорость доставки");
 
         formGrid.add(new Label("ID:"), 0, 0);
         formGrid.add(deliveryMethodIdField, 1, 0);
+
         formGrid.add(new Label("Название:"), 0, 1);
         formGrid.add(deliveryMethodNameField, 1, 1);
+
+        formGrid.add(new Label("Скорость доставки:"), 0, 2);
+        formGrid.add(deliveryMethodSpeedDaysField, 1, 2);
 
         addDeliveryMethodButton = new Button("Добавить способ");
         saveDeliveryMethodButton = new Button("Обновить способ");

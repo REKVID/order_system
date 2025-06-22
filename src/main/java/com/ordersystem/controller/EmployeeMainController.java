@@ -79,12 +79,12 @@ public class EmployeeMainController {
         productController.deleteProduct(idText);
     }
 
-    public void handleCreateDeliveryMethod(String name) {
-        deliveryMethodController.createDeliveryMethod(name);
+    public void handleCreateDeliveryMethod(String name, String speedDays) {
+        deliveryMethodController.createDeliveryMethod(name, speedDays);
     }
 
-    public void handleUpdateDeliveryMethod(String idText, String name) {
-        deliveryMethodController.updateDeliveryMethod(idText, name);
+    public void handleUpdateDeliveryMethod(String idText, String name, String speedDays) {
+        deliveryMethodController.updateDeliveryMethod(idText, name, speedDays);
     }
 
     public void handleDeleteDeliveryMethod(String idText) {
