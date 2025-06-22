@@ -6,10 +6,8 @@ import java.util.List;
 import com.ordersystem.containers.AvailableDeliveryMethods;
 import com.ordersystem.containers.DeliveryMethods;
 import com.ordersystem.containers.Products;
-import com.ordersystem.dao.AvailableDeliveryMethodDAO;
 import com.ordersystem.dao.ClientChoiceDAO;
 import com.ordersystem.dao.ClientDAO;
-import com.ordersystem.dao.DeliveryMethodDAO;
 import com.ordersystem.dao.DocumentDAO;
 import com.ordersystem.dao.UserDAO;
 import com.ordersystem.model.AvailableDeliveryMethod;
@@ -32,8 +30,6 @@ public class ClientMainController {
     private final Integer clientId;
     private final DocumentDAO documentDAO;
     private final ClientDAO clientDAO;
-    private final DeliveryMethodDAO deliveryMethodDAO;
-    private final AvailableDeliveryMethodDAO availableDeliveryMethodDAO;
     private final UserDAO userDAO;
     private final List<ClientChoice> DealTempContainer;
 
@@ -42,8 +38,6 @@ public class ClientMainController {
         this.clientId = clientId;
         this.documentDAO = new DocumentDAO();
         this.clientDAO = new ClientDAO();
-        this.deliveryMethodDAO = new DeliveryMethodDAO();
-        this.availableDeliveryMethodDAO = new AvailableDeliveryMethodDAO();
         this.userDAO = new UserDAO();
         this.view = new ClientMainView(this);
         this.DealTempContainer = new ArrayList<>();
