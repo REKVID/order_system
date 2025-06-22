@@ -2,6 +2,7 @@ package com.ordersystem.containers;
 
 import java.util.List;
 
+import com.ordersystem.dao.ClientChoiceDAO;
 import com.ordersystem.dao.DocumentDAO;
 import com.ordersystem.model.ClientChoice;
 import com.ordersystem.model.Document;
@@ -50,8 +51,9 @@ public class Documents {
         if (document == null) {
             selectedDocumentChoices.clear();
         } else {
-            ClientChoices clientChoices = new ClientChoices(document.getId());
-            selectedDocumentChoices.setAll(clientChoices.getClientChoicesList());
+            ClientChoiceDAO clientChoiceDAO = new ClientChoiceDAO();
+            List<ClientChoice> choices = clientChoiceDAO.findByDocumentId(document.getId());
+            selectedDocumentChoices.setAll(choices);
         }
     }
 }

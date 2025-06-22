@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Optional;
 
 import com.ordersystem.App;
-import com.ordersystem.containers.ClientChoices;
 import com.ordersystem.containers.Products;
 import com.ordersystem.dao.AvailableDeliveryMethodDAO;
+import com.ordersystem.dao.ClientChoiceDAO;
 import com.ordersystem.dao.ClientDAO;
 import com.ordersystem.dao.DeliveryMethodDAO;
 import com.ordersystem.dao.DocumentDAO;
@@ -178,7 +178,8 @@ public class ClientMainController {
         }
     }
 
-    private ClientChoice createClientChoiceFromDialog(String quantityText, AvailableDeliveryMethod selectedDelivery,Product product) {
+    private ClientChoice createClientChoiceFromDialog(String quantityText, AvailableDeliveryMethod selectedDelivery,
+            Product product) {
         int quantity;
         try {
             quantity = Integer.parseInt(quantityText);
@@ -224,10 +225,10 @@ public class ClientMainController {
         int documentId = documentDAO.create(newDocument);
 
         if (documentId != -1) {
-            ClientChoices clientChoices = new ClientChoices(documentId);
+            ClientChoiceDAO clientChoiceDAO = new ClientChoiceDAO();
             for (ClientChoice choice : shoppingCart) {
                 choice.setDocumentId(documentId);
-                clientChoices.create(choice);
+                clientChoiceDAO.create(choice);
             }
             showAlert(Alert.AlertType.INFORMATION, "Ваш заказ успешно оформлен!");
             shoppingCart.clear(); // Очищаем корзину после успешного заказа
