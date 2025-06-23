@@ -250,7 +250,7 @@ public class EmployeeMainView {
         VBox container = ViewBaseSettings.createBaseViewContainer("Документы по сделкам", 20);
 
         documentsTableView = new TableView<>();
-        TableColumn<Document, Integer> docIdColumn = new TableColumn<>("ID сделки");
+        TableColumn<Document, Integer> docIdColumn = new TableColumn<>("ID документа");
         docIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
 
         TableColumn<Document, Integer> clientIdColumn = new TableColumn<>("ID Клиента");
